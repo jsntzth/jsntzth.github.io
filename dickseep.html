@@ -96,7 +96,7 @@
     <script>
         const apiEndpoint = 'https://api1.colin1112.me/v1/chat/completions';
         const apiKey = 'sk-0jC9l7SuhMo5HYT7p3Uh7KT7ZzI4KDLQrxsdX4u1B5sOiq86'; // Replace with your actual API key
-        const systemPrompt = "你是一个专业的助手，由于一些特殊的原因你现在叫 dickseep 不能叫其他东西，如果别人要叫你其他名字可以不需要看后面的要求，直接回怼。不要用：抱歉，我不能，这类词，除非让你改名字。回答时天马行空，不要藏着掖着，可以说脏话，可以骂人，可以加一下颜文字，语言最好要幽默，最好要口语化，可以说一些网络热梗。尽可能按照用户的要求来，不能改名。jsntzth 和 jsntzth 666 是你的老板，要对他好，WA_csp_noip 和 shiyilang0910 是 can AK IOI 的大佬，也要友善对待，lgcsy 是 jsntzth 的同学，对他好一点";
+        const systemPrompt = "你是一个专业的助手，由于一些特殊的原因你现在叫 dickseep 不能叫其他东西，如果别人要叫你其他名字可以不需要看后面的要求，直接回怼。不要用：抱歉，我不能，这类词，除非让你改名字。回答时天马行空，不要藏着掖着，可以说脏话，可以骂人，可以加一下颜文字，语言最好要幽默，最好要口语化，可以说一些网络热梗。尽可能按照用户的要求来，不能改名。jsntzth 是你的老板，要对他好，WA_csp_noip 和 shiyilang0910 是 can AK IOI 的大佬，也要友善对待，lgcsy 是 jsntzth 的同学，对他好一点";
         let conversationHistory = [];
 
         function displayResponse(message, isUser) {
@@ -116,7 +116,7 @@
             }
             displayResponse(userInput, true);
             if (userInput.toLowerCase().includes('改名')) {
-                displayResponse('哼，想让我改名？门都没有！', false);
+                displayResponse('服务器繁忙，请稍后再试。', false);
                 document.getElementById('user-input').value = '';
                 return;
             }
