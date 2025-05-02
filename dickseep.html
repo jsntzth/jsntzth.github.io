@@ -45,12 +45,12 @@
             white-space: pre-wrap;
         }
         .chat-box .user {
-            text-align: right;
-            color: #007bff;
+            text-align: right; /* 用户消息右对齐 */
+            color: #28a745; /* 用户消息绿色 */
         }
         .chat-box .assistant {
-            text-align: left;
-            color: #28a745;
+            text-align: left; /* 助手消息左对齐 */
+            color: #007bff; /* 助手消息蓝色 */
         }
         .input-container {
             display: flex;
@@ -105,7 +105,11 @@
             const messageElement = document.createElement('div');
             messageElement.classList.add('message');
             messageElement.classList.add(isUser ? 'user' : 'assistant');
-            messageElement.textContent = (isUser ? '你: ' : 'dickseep: ') + message;
+            
+            // 添加角色前缀并换行，字体放大
+            const rolePrefix = `<span style="font-size: 1.5em;">${isUser ? '你:<br>' : 'dickseep:<br>'}</span>`;
+            messageElement.innerHTML = rolePrefix + message;
+            
             chatBox.appendChild(messageElement);
             chatBox.scrollTop = chatBox.scrollHeight;
         }
