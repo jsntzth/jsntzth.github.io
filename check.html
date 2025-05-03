@@ -50,8 +50,8 @@
     background-color: #0056b3;
   }
   .message {
-    margin-top: 20px;
-    font-size: 16px;
+    margin-top: 10px;
+    font-size: 13px;
     font-weight: bold;
   }
 </style>
@@ -102,9 +102,7 @@ function drawBackground(canvas) {
   ctx.clearRect(0, 0, canvas.width, canvas.height);
   ctx.fillStyle = getRandomLightColor();
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  
-  // 绘制干扰斜线
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < n; i++) {
     ctx.beginPath();
     ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
     ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
@@ -114,7 +112,7 @@ function drawBackground(canvas) {
   }
 
   // 绘制小圆点
-  for (let i = 0; i < 100; i++) {
+  for (let i = 0; i < n * 15; i++) {
     const x = Math.random() * canvas.width;
     const y = Math.random() * canvas.height;
     const radius = Math.random() * 2;
