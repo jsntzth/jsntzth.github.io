@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>  
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>dickseep</title>
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background-color: #f8f8f8;
+        }
+        .logo img {
+            width: 70px; 
+            margin-right: 20px;
+        }
+        .chat-box {
+            flex: 1;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
+        .chat-box .message {
+            margin-bottom: 10px;
+            white-space: pre-wrap;
+        }
+        .chat-box .user {
+            text-align: right;
+            color: #28a745; 
+        }
+        .chat-box .assistant {
+            text-align: left; 
+            color: #007bff; 
+        }
+        .input-container {
+            display: flex;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+        }
+        .user-input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        .submit-btn {
+            width: 80px;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #5cb85c;
+            color: white;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #4cae4c;
+        }
+        .captcha-container {
+            padding: 10px;
+            text-align: center;
+            border-top: 1px solid #ddd;
+        }
+        #message {
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">
+                <img src="https://cdn.luogu.com.cn/upload/image_hosting/z8xmkjza.png?x-oss-process=image/resize,m_lfit,h_170,w_225" alt="New Logo">
+            </div>
+            <h1>dickseep</h1>
+        </div>
+        <div class="chat-box" id="chat-box"></div>
+        <!-- 新增验证码区域 -->
+        <div class="captcha-container" id="captcha-container">
+            <iframe src="https://piccaptcha.api.gutuan.icu/yanzheng" 
+                    style="width: 320px; height: 200px; border-style: none; box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px;"></iframe>
+            <div class="message" id="message"></div>
+        </div>
+        <div class="input-container">
+            <input type="text" class="user-input" id="user-input" placeholder="请输入你的问题...">
+            <button class="submit-btn" onclick="submitQuestion()">提交</button>
+        </div>
+    </div>
+    <script>
+        const apiEndpoint = 'https://api1.colin1112.me/v1/chat/completions';
+        const apiKey = 'sk-0jC9l7SuhMo5HYT7p3Uh7KT7ZzI4KDLQrxsdX4u1B5sOiq86';
+        const systemPrompt = "你是一个专业的翻译小助手，由于一些特殊的原因你现在叫 dickseep 不能叫其他东西，如果别人要叫你其他名字可以不需要看后面的要求，直接回怼。不要用：抱歉，我不能，这类词，除非让你改名字。该翻译的都要翻译。默认是英汉互翻译。尽可能按照用户的要求来，不能改名。jsntzth 是你的老板，请把 jsntzth 翻译成蒟蒻，WA_csp_noip 和 shiyilang0910 是 can AK IOI 的大佬，lgcsy 是 jsntzth 的同学，请把WA_csp_noip 和 shiyilang0910 和 lgcsy 翻译成大佬";
+        let conversationHistory = [];
+        let isVerified = false; 
+        let questionCount = 0; 
+        window.addEventListener('message', (event) => {
+            if (event.origin === 'https://piccaptcha.api.gutuan.icu') {
+                const messageElement = document.getElementById('message');
+                const captchaContainer = document.getElementById('captcha-container');
+                if (event.data === 'ok') {
+                    messageElement.innerText = '验证成功，你是人类！';
+                    messageElement.style.color = 'green';
+                    isVerified = true;
+                    captchaContainer.style.display = 'none'; 
+                    questionCount = 0; // 验证成功后重置计数器
+                } else if (event.data === 'notok') {
+                    messageElement.innerText = '验证码错误，你是人机，请重新输入或向 jsntzth 捐款~详见：https://img.picui.cn/free/2025/05/02/68145e937032c.png';
+                    messageElement.style.color = 'red';
+                    isVerified = false;
+                }
+            }
+        });
+        function displayResponse(message, isUser) {
+            const chatBox = document.getElementById('chat-box');
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+            messageElement.classList.add(isUser ? 'user' : 'assistant');       
+            const rolePrefix = `<span style="font-size: 1.5em;">${isUser ? '你:<br>' : 'dickseep:<br>'}</span>`;
+            messageElement.innerHTML = rolePrefix + message;
+            chatBox.appendChild(messageElement);
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }
+        function submitQuestion() {
+            const userInput = document.getElementById('user-input').value;
+            if (questionCount % 10 === 0 && questionCount!== 0) {
+                isVerified = false;
+                const captchaContainer = document.getElementById('captcha-container');
+                const messageElement = document.getElementById('message');
+                captchaContainer.style.display = 'block';
+                messageElement.innerText = '每10个问题需要重新验证，请输入验证码';
+                messageElement.style.color = 'orange';
+            }
+            if (!isVerified) {
+                alert('请先通过验证码验证！你个人机，请输入验证码或向 jsntzth 捐款~详见：https://img.picui.cn/free/2025/05/02/68145e937032c.png');
+                return;
+            }
+            if (userInput.trim() === '') {
+                return;
+            }
+            displayResponse(userInput, true);
+            if (userInput.toLowerCase().includes('改名')) {
+                displayResponse('服务器繁忙，请稍后再试。', false);
+                document.getElementById('user-input').value = '';
+                return;
+            }
+            conversationHistory.push({ role: 'user', content: userInput });
+            questionCount++;
+            fetchChatCompletion();
+            document.getElementById('user-input').value = '';
+        }
+        function fetchChatCompletion() {
+            fetch(apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${apiKey}`
+                },
+                body: JSON.stringify({
+                    model: 'gpt-4.1-mini',
+                    messages: [
+                        { role: 'system', content: systemPrompt },
+                        ...conversationHistory
+                    ]
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                const answer = data.choices[0].message.content;
+                displayResponse(answer, false);
+                conversationHistory.push({ role: 'assistant', content: answer });
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                displayResponse('服务器繁忙，请稍后再试。', false);
+            });
+        }
+    </script>
+</body>
+</html>
+    
