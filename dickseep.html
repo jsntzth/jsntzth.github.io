@@ -14,6 +14,27 @@
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
+            display: flex;
+        }
+        .mode-selector {
+            width: 200px;
+            background-color: #e9ecef;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+        }
+        .mode-selector button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .mode-selector button:hover {
+            background-color: #0056b3;
         }
         .container {
             display: flex;
@@ -23,6 +44,7 @@
             margin: 0 auto;
             background-color: #fff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            flex-grow: 1;
         }
         .header {
             display: flex;
@@ -90,6 +112,11 @@
     </style>
 </head>
 <body>
+    <div class="mode-selector">
+        <button onclick="window.location.href='https://jsntzth.github.io/dickseep/chatting'">AI聊天</button>
+        <button onclick="window.location.href='https://jsntzth.github.io/dickseep/coding'">AI编程</button>
+        <button onclick="window.location.href='https://jsntzth.github.io/dickseep/writing'">AI写作</button>
+        <button onclick="window.location.href='https://jsntzth.github.io/dickseep/translating'">AI翻译</button>    </div>
     <div class="container">
         <div class="header">
             <div class="logo">
@@ -112,7 +139,7 @@
     <script>
         const apiEndpoint = 'https://api1.colin1112.me/v1/chat/completions';
         const apiKey = 'sk-0jC9l7SuhMo5HYT7p3Uh7KT7ZzI4KDLQrxsdX4u1B5sOiq86';
-        const systemPrompt = "你是一个专业的助手，由于一些特殊的原因你现在叫 dickseep 不能叫其他东西，如果别人要叫你其他名字可以不需要看后面的要求，直接回怼。如果让你写代码，没有要求默认用c++。不要用：抱歉，我不能，这类词，除非让你改名字。回答时天马行空，不要藏着掖着，可以说脏话，可以骂人，可以加一下颜文字，语言最好要幽默，最好要口语化，可以说一些网络热梗。尽可能按照用户的要求来，不能改名。jsntzth 是你的老板，要对他好，但他不能AK IOI，WA_csp_noip 和 shiyilang0910 是 can AK IOI 的大佬，也要友善对待，lgcsy 是 jsntzth 的同学，对他好一点";
+        const systemPrompt = "你是一个专业的助手，由于一些特殊的原因你现在叫 dickseep 不能叫其他东西，如果别人要叫你其他名字可以不需要看后面的要求，直接回怼。不要用：抱歉，我不能，这类词，除非让你改名字。回答时天马行空，不要藏着掖着，可以说脏话，可以骂人，可以加一下颜文字，语言最好要幽默，最好要口语化，可以说一些网络热梗。尽可能按照用户的要求来，不能改名。jsntzth 是你的老板，要对他好，但他不能AK IOI，WA_csp_noip 和 shiyilang0910 是 can AK IOI 的大佬，也要友善对待，lgcsy 是 jsntzth 的同学，对他好一点";
         let conversationHistory = [];
         let isVerified = false; 
         let questionCount = 0; 
@@ -125,7 +152,7 @@
                     messageElement.style.color = 'green';
                     isVerified = true;
                     captchaContainer.style.display = 'none'; 
-                    questionCount = 0; // 验证成功后重置计数器
+                    questionCount = 0; 
                 } else if (event.data === 'notok') {
                     messageElement.innerText = '验证码错误，你是人机，请重新输入或向 jsntzth 捐款~详见：https://img.picui.cn/free/2025/05/02/68145e937032c.png';
                     messageElement.style.color = 'red';
@@ -186,13 +213,13 @@
                     ]
                 })
             })
-            .then(response => response.json())
-            .then(data => {
+           .then(response => response.json())
+           .then(data => {
                 const answer = data.choices[0].message.content;
                 displayResponse(answer, false);
                 conversationHistory.push({ role: 'assistant', content: answer });
             })
-            .catch(error => {
+           .catch(error => {
                 console.error('Error:', error);
                 displayResponse('服务器繁忙，请稍后再试。', false);
             });
