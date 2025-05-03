@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>图像验证码</title>
+<style>
+  body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+    font-family: Arial, sans-serif;
+  }
+  .captcha-container {
+    position: relative;
+    display: inline-block;
+    padding: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 25px 25px 85px rgba(0,0,0,0.1);
+  }
+  canvas {
+    display: none; 
+    width: 400px;
+    height: 80px;
+  }
+  .input-container {
+    margin-top: 40px;
+  }
+  input[type="text"] {
+    width: 200px;
+    padding: 10px;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 4px;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+  .message {
+    margin-top: 20px;
+    font-size: 16px;
+    font-weight: bold;
+  }
+</style>
+</head>
+<body>
+<div class="captcha-container">
+  <canvas id="captchaCanvas"></canvas>
+  <img id="captchaImage" alt="Captcha Image">
+</div>
+<div class="input-container">
+  <input type="text" id="captchaInput" placeholder="输入验证码">
+  <button id="verifyButton">验证</button>
+</div>
+<div class="message" id="message"></div>
+<script>
+  let n = 10;
+  let captchaText = '';
+  function generateCaptchaText() {
+    const chars = 'QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890';
+    let captcha = '';
+    for (let i = 0; i < n; i++) { 
+      captcha += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    return captcha;
+  }
+  function getRandomColor() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+  function getRandomLightColor() {
+    const r = Math.floor(Math.random() * 180) + 75;
+    const g = Math.floor(Math.random() * 180) + 75;
+    const b = Math.floor(Math.random() * 180) + 75;
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+  function getRandomDarkColor() {
+    const r = Math.floor(Math.random() * 100);
+    const g = Math.floor(Math.random() * 100);
+    const b = Math.floor(Math.random() * 100);
+    return `rgb(${r}, ${g}, ${b})`;
+  }
+function drawBackground(canvas) {
+  const ctx = canvas.getContext('2d');
+  canvas.width = 280; 
+  canvas.height = 80; 
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = getRandomLightColor();
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // 绘制干扰斜线
+  for (let i = 0; i < 10; i++) {
+    ctx.beginPath();
+    ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+    ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+    ctx.strokeStyle = getRandomLightColor();
+    ctx.lineWidth = Math.random() * 2 + 1;
+    ctx.stroke();
+  }
+
+  // 绘制小圆点
+  for (let i = 0; i < 100; i++) {
+    const x = Math.random() * canvas.width;
+    const y = Math.random() * canvas.height;
+    const radius = Math.random() * 2;
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+    ctx.fillStyle = getRandomLightColor();
+    ctx.fill();
+  }
+}
+
+  function drawCaptchaText(canvas, text) {
+    const ctx = canvas.getContext('2d');
+    const charWidth = canvas.width / (text.length + 1);
+    ctx.font = "bold 30px Arial";
+    ctx.textBaseline = 'middle';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = getRandomDarkColor();
+    for (let i = 0; i < text.length; i++) {
+      const x = charWidth * (i + 1) + (Math.random() - 0.5) * 10;
+      const y = canvas.height / 2 + (Math.random() - 0.5) * 10; 
+      const angle = (Math.random() * 60 - 15) * Math.PI / 180;
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.rotate(angle);
+      ctx.fillText(text[i], 0, 0);
+      ctx.restore();
+    }
+    ctx.font = "12px Arial";
+    ctx.textBaseline = 'bottom';
+    ctx.textAlign = 'right';
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
+    ctx.fillText("此验证码由 jsntzth 提供", canvas.width - 5, canvas.height - 5);
+  }
+  function createCaptchaImage() {
+    const captchaCanvas = document.getElementById('captchaCanvas');
+    captchaText = generateCaptchaText();
+    drawBackground(captchaCanvas);
+    drawCaptchaText(captchaCanvas, captchaText);
+    const dataURL = captchaCanvas.toDataURL('image/png');
+    if (dataURL) {
+      const captchaImage = document.getElementById('captchaImage');
+      captchaImage.src = dataURL;
+    } else {
+      console.error('Error generating captcha image');
+    }
+  }
+  function verifyCaptcha() {
+    const userInput = document.getElementById('captchaInput').value;
+    const messageElement = document.getElementById('message');
+    if (userInput === captchaText) {
+      messageElement.innerText = '验证码正确，你可能是人类，也有可能是 python';
+      messageElement.style.color = 'green';
+      parent.postMessage('ok', '*');
+    } else {
+      messageElement.innerText = '不正确，你是人机，如果你想证明你不是人机，请向 jsntzth 捐款';
+      messageElement.style.color = 'red';
+      document.getElementById('captchaInput').value = ''; 
+     createCaptchaImage();
+      parent.postMessage('notok', '*');
+      n += 2;
+    }
+  }
+  document.addEventListener('DOMContentLoaded', () => {
+    createCaptchaImage();
+  });
+  document.getElementById('verifyButton').addEventListener('click', verifyCaptcha);
+  document.getElementById('captchaInput').addEventListener('input', () => {
+    const messageElement = document.getElementById('message');
+    messageElement.innerText = '';
+  });
+</script>
+</body>
+</html>
