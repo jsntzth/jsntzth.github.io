@@ -135,13 +135,13 @@
         <div class="chat-box" id="chat-box"></div>
         <!-- 验证码区域 -->
         <div class="captcha-container" id="captcha-container">
-            <iframe src="https://piccaptcha.api.gutuan.icu/yanzheng" 
+            <iframe src="https://jsntzth.github.io/check.html" 
                     style="width: 320px; height: 200px; border-style: none; box-shadow: rgba(0, 0, 0, 0.1) 2px 2px 8px;"></iframe>
             <div class="message" id="message"></div>
         </div>
         <div class="input-container">
             <!-- 替换为textarea -->
-            <textarea class="user-input" id="user-input" placeholder="请输入你的问题（支持换行）..."></textarea>
+            <textarea class="user-input" id="user-input" placeholder="请输入你的问题"></textarea>
             <button class="submit-btn" onclick="submitQuestion()">提交</button>
         </div>
     </div>
@@ -153,7 +153,7 @@
         let isVerified = false; 
         let questionCount = 0; 
         window.addEventListener('message', (event) => {
-            if (event.origin === 'https://piccaptcha.api.gutuan.icu') {
+            if (event.origin === 'https://jsntzth.github.io/check.html') {
                 const messageElement = document.getElementById('message');
                 const captchaContainer = document.getElementById('captcha-container');
                 if (event.data === 'ok') {
