@@ -127,7 +127,7 @@
                     captchaContainer.style.display = 'none'; 
                     questionCount = 0; // 验证成功后重置计数器
                 } else if (event.data === 'notok') {
-                    messageElement.innerText = '验证码错误，你是人机，请重新输入或向 jsntzth 捐款~详见：https://img.picui.cn/free/2025/05/02/68145e937032c.png';
+                    messageElement.innerText = '验证码错误，你是人机，请重新输入或向 jsntzth 捐款~';
                     messageElement.style.color = 'red';
                     isVerified = false;
                 }
@@ -154,7 +154,7 @@
                 messageElement.style.color = 'orange';
             }
             if (!isVerified) {
-                alert('请先通过验证码验证！你个人机，请输入验证码或向 jsntzth 捐款~详见：https://img.picui.cn/free/2025/05/02/68145e937032c.png');
+                alert('请先通过验证码验证！你个人机，请输入验证码或向 jsntzth 捐款~');
                 return;
             }
             if (userInput.trim() === '') {
