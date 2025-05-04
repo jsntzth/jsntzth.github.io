@@ -67,8 +67,20 @@
 </div>
 <div class="message" id="message"></div>
 <script>
-  let n = 10;
+  let n = 8;
   let captchaText = '';
+  function generateBaseColor() {
+    const r = Math.floor(Math.random() * 256);
+    const g = Math.floor(Math.random() * 256);
+    const b = Math.floor(Math.random() * 256);
+    return {r, g, b};
+  }
+    function generateSimilarColor(baseColor, variance = 30) {
+    const newR = Math.min(255, Math.max(0, baseColor.r + (Math.random() * variance * 3 - variance)));
+    const newG = Math.min(255, Math.max(0, baseColor.g + (Math.random() * variance * 3 - variance)));
+    const newB = Math.min(255, Math.max(0, baseColor.b + (Math.random() * variance * 3 - variance)));
+    return `rgb(${newR}, ${newG}, ${newB})`;
+  }
   function generateCaptchaText() {
     const chars = 'QWERTYUIOPASDFGHJKLZXCVBNMqwertyuiopasdfghjklzxcvbnm1234567890';
     let captcha = '';
@@ -77,63 +89,42 @@
     }
     return captcha;
   }
-  function getRandomColor() {
-    const r = Math.floor(Math.random() * 256);
-    const g = Math.floor(Math.random() * 256);
-    const b = Math.floor(Math.random() * 256);
-    return `rgb(${r}, ${g}, ${b})`;
+  function drawBackground(canvas, baseColor) {
+    const ctx = canvas.getContext('2d');
+    canvas.width = 280; 
+    canvas.height = 80; 
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+     ctx.fillStyle = generateSimilarColor(baseColor, 50);
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    for (let i = 0; i < n * 5; i++) {
+      ctx.beginPath();
+      ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
+      ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
+      ctx.strokeStyle = generateSimilarColor(baseColor, 30);
+      ctx.lineWidth = Math.random() * 2 + 1;
+      ctx.stroke();
+    }
+    for (let i = 0; i < n * 50; i++) {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height;
+      const radius = Math.random() * 2;
+      ctx.beginPath();
+      ctx.arc(x, y, radius, 0, Math.PI * 2, false);
+      ctx.fillStyle = generateSimilarColor(baseColor, 30);
+      ctx.fill();
+    }
   }
-  function getRandomLightColor() {
-    const r = Math.floor(Math.random() * 180) + 75;
-    const g = Math.floor(Math.random() * 180) + 75;
-    const b = Math.floor(Math.random() * 180) + 75;
-    return `rgb(${r}, ${g}, ${b})`;
-  }
-  function getRandomDarkColor() {
-    const r = Math.floor(Math.random() * 100);
-    const g = Math.floor(Math.random() * 100);
-    const b = Math.floor(Math.random() * 100);
-    return `rgb(${r}, ${g}, ${b})`;
-  }
-function drawBackground(canvas) {
-  const ctx = canvas.getContext('2d');
-  canvas.width = 280; 
-  canvas.height = 80; 
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.fillStyle = getRandomLightColor();
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
-  for (let i = 0; i < n; i++) {
-    ctx.beginPath();
-    ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
-    ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
-    ctx.strokeStyle = getRandomLightColor();
-    ctx.lineWidth = Math.random() * 2 + 1;
-    ctx.stroke();
-  }
-
-  // 绘制小圆点
-  for (let i = 0; i < n * 15; i++) {
-    const x = Math.random() * canvas.width;
-    const y = Math.random() * canvas.height;
-    const radius = Math.random() * 2;
-    ctx.beginPath();
-    ctx.arc(x, y, radius, 0, Math.PI * 2, false);
-    ctx.fillStyle = getRandomLightColor();
-    ctx.fill();
-  }
-}
-
-  function drawCaptchaText(canvas, text) {
+  function drawCaptchaText(canvas, text, baseColor) {
     const ctx = canvas.getContext('2d');
     const charWidth = canvas.width / (text.length + 1);
     ctx.font = "bold 30px Arial";
     ctx.textBaseline = 'middle';
     ctx.textAlign = 'center';
-    ctx.fillStyle = getRandomDarkColor();
-    for (let i = 0; i < text.length; i++) {
+     for (let i = 0; i < text.length; i++) {
       const x = charWidth * (i + 1) + (Math.random() - 0.5) * 10;
       const y = canvas.height / 2 + (Math.random() - 0.5) * 10; 
       const angle = (Math.random() * 60 - 15) * Math.PI / 180;
+       ctx.fillStyle = generateSimilarColor(baseColor, -30);     
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate(angle);
@@ -149,8 +140,9 @@ function drawBackground(canvas) {
   function createCaptchaImage() {
     const captchaCanvas = document.getElementById('captchaCanvas');
     captchaText = generateCaptchaText();
-    drawBackground(captchaCanvas);
-    drawCaptchaText(captchaCanvas, captchaText);
+     const baseColor = generateBaseColor(); 
+    drawBackground(captchaCanvas, baseColor);
+    drawCaptchaText(captchaCanvas, captchaText, baseColor);
     const dataURL = captchaCanvas.toDataURL('image/png');
     if (dataURL) {
       const captchaImage = document.getElementById('captchaImage');
