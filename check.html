@@ -68,6 +68,7 @@
 <div class="message" id="message"></div>
 <script>
   let n = 8;
+  let m = 8.0;
   let captchaText = '';
   function generateBaseColor() {
     const r = Math.floor(Math.random() * 256);
@@ -164,7 +165,8 @@
       document.getElementById('captchaInput').value = ''; 
      createCaptchaImage();
       parent.postMessage('notok', '*');
-      n += 2;
+      m += 0.1
+      n = Math.floor (m);
     }
   }
   document.addEventListener('DOMContentLoaded', () => {
