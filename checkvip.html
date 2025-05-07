@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VIP验证</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+       .input-container {
+            margin-top: 20px;
+        }
+        input[type="text"] {
+            width: 200px;
+            padding: 10px;
+            font-size: 16px;
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+       .message {
+            margin-top: 10px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="input-container">
+        <input type="text" id="captchaInput" placeholder="请输入VIP码">
+        <button id="verifyButton">验证</button>
+    </div>
+    <div class="message" id="message"></div>
+    <script>
+        function getTodayCorrectCode() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            return (year * month * day * 114514).toString();
+        }
+        function verifyCaptcha() {
+            const userInput = document.getElementById('captchaInput').value;
+            const messageElement = document.getElementById('message');
+            const correctAnswer = getTodayCorrectCode();
+            if (userInput === correctAnswer) {
+                messageElement.textContent = '验证码正确，验证成功！你是高贵的 VIP!';
+                messageElement.style.color = 'green';
+            } else {
+                messageElement.textContent = '不对，输入内容不正确，请重新输入。或向 jsntzth 捐款获得 VIP!';
+                messageElement.style.color ='red';
+                document.getElementById('captchaInput').value = '';
+            }
+        }
+        document.getElementById('verifyButton').addEventListener('click', verifyCaptcha);
+        document.getElementById('captchaInput').addEventListener('input', () => {
+            const messageElement = document.getElementById('message');
+            messageElement.textContent = '';
+        });
+    </script>
+</body>
+</html>
