@@ -64,10 +64,12 @@
             if (userInput === correctAnswer) {
                 messageElement.textContent = '验证码正确，验证成功！你是高贵的 VIP!';
                 messageElement.style.color = 'green';
+		window.parent.postMessage('ok', '*');
             } else {
                 messageElement.textContent = '不对，输入内容不正确，请重新输入。或向 jsntzth 捐款获得 VIP!';
                 messageElement.style.color ='red';
                 document.getElementById('captchaInput').value = '';
+  		parent.postMessage('notok', '*');
             }
         }
         document.getElementById('verifyButton').addEventListener('click', verifyCaptcha);
