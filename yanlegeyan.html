@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>人机验证小游戏</title>
+<title>验了个验</title>
 <style>
   body {
     display: flex;
@@ -16,7 +16,6 @@
     font-family: 'Inter', system-ui, sans-serif;
     transition: background-color 0.3s ease;
   }
-  
   .captcha-container {
     position: relative;
     background-color: white;
@@ -26,7 +25,6 @@
     width: 320px;
     transition: all 0.3s ease;
   }
-  
   .level-indicator {
     position: absolute;
     top: -15px;
@@ -41,7 +39,6 @@
     box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
     transition: all 0.5s ease;
   }
-  
   canvas {
     display: block;
     width: 100%;
@@ -50,13 +47,11 @@
     margin-bottom: 16px;
     transition: all 0.3s ease;
   }
-  
   .input-container {
     margin-top: 20px;
     display: flex;
     gap: 12px;
   }
-  
   input[type="text"] {
     flex: 1;
     padding: 10px 14px;
@@ -66,12 +61,10 @@
     outline: none;
     transition: border-color 0.2s ease;
   }
-  
   input[type="text"]:focus {
     border-color: #4f46e5;
     box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.2);
   }
-  
   button {
     padding: 10px 20px;
     font-size: 16px;
@@ -84,18 +77,15 @@
     transition: all 0.2s ease;
     box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
   }
-  
   button:hover {
     background-color: #4338ca;
     transform: translateY(-1px);
     box-shadow: 0 6px 16px rgba(79, 70, 229, 0.3);
   }
-  
   button:active {
     transform: translateY(0);
     box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
   }
-  
   .message {
     margin-top: 12px;
     font-size: 14px;
@@ -103,19 +93,15 @@
     text-align: center;
     transition: all 0.3s ease;
   }
-  
   .success {
     color: #10b981;
   }
-  
   .error {
     color: #ef4444;
   }
-  
   .animation-pulse {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
-  
   .difficulty-transition {
     position: fixed;
     top: 0;
@@ -131,7 +117,6 @@
     pointer-events: none;
     transition: opacity 0.5s ease;
   }
-  
   .difficulty-text {
     color: white;
     font-size: 48px;
@@ -140,21 +125,17 @@
     opacity: 0;
     transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
-  
   .difficulty-transition.active .difficulty-text {
     transform: scale(2);
     opacity: 1;
   }
-  
   .difficulty-transition.fade-out {
     opacity: 0;
   }
-  
   .difficulty-transition.active {
     opacity: 1;
     pointer-events: auto;
   }
-  
   @keyframes pulse {
     0%, 100% {
       opacity: 1;
@@ -167,9 +148,8 @@
 </head>
 <body>
 <div class="difficulty-transition" id="difficultyTransition">
-  <div class="difficulty-text">难度提升！</div>
+  <div class="difficulty-text">难度飘升！</div>
 </div>
-
 <div class="captcha-container">
   <div class="level-indicator" id="levelIndicator">第1关：简单验证码</div>
   <canvas id="captchaCanvas"></canvas>
@@ -179,38 +159,40 @@
   </div>
   <div class="message" id="message"></div>
 </div>
-
 <script>
+  if (window.console && console.log) {
+    const originalLog = console.log;
+    console.log = function() {
+      if (arguments.length > 0 && (arguments[0].includes('captcha') || arguments[0].includes('text'))) {
+        throw new Error('安全限制：禁止打印验证码相关信息');
+      }
+      originalLog.apply(console, arguments);
+    };
+  }
   let currentLevel = 1;
   let captchaText = '';
-  
-  // 生成基础颜色
+  let currentCaptcha = ''; 
   function generateBaseColor() {
     const r = Math.floor(Math.random() * 256);
     const g = Math.floor(Math.random() * 256);
     const b = Math.floor(Math.random() * 256);
     return {r, g, b};
   }
-  
-  // 生成相似颜色
   function generateSimilarColor(baseColor, variance = 30) {
-    const newR = Math.min(255, Math.max(0, baseColor.r + (Math.random() * variance * 3 - variance)));
-    const newG = Math.min(255, Math.max(0, baseColor.g + (Math.random() * variance * 3 - variance)));
-    const newB = Math.min(255, Math.max(0, baseColor.b + (Math.random() * variance * 3 - variance)));
+    const adjustedVariance = currentLevel === 2 ? 15 : variance;
+    const newR = Math.min(255, Math.max(0, baseColor.r + (Math.random() * adjustedVariance * 2 - adjustedVariance)));
+    const newG = Math.min(255, Math.max(0, baseColor.g + (Math.random() * adjustedVariance * 2 - adjustedVariance)));
+    const newB = Math.min(255, Math.max(0, baseColor.b + (Math.random() * adjustedVariance * 2 - adjustedVariance)));
     return `rgb(${newR}, ${newG}, ${newB})`;
   }
-  
-  // 生成简单验证码文本（第一关）
   function generateSimpleCaptchaText() {
-    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // 排除易混淆字符
+    const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
     let captcha = '';
     for (let i = 0; i < 4; i++) { 
       captcha += chars.charAt(Math.floor(Math.random() * chars.length));
     }
     return captcha;
   }
-  
-  // 生成复杂验证码文本（第二关）
   function generateComplexCaptchaText() {
     const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%&*';
     let captcha = '';
@@ -219,20 +201,14 @@
     }
     return captcha;
   }
-  
-  // 绘制简单背景（第一关）
   function drawSimpleBackground(canvas, baseColor) {
     const ctx = canvas.getContext('2d');
     canvas.width = 320; 
     canvas.height = 100; 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // 纯色背景
     ctx.fillStyle = '#f9fafb';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    // 添加极少量干扰线
-    for (let i = 0; i < 3; i++) {
+    for (let i = 0; i < 5; i++) {
       ctx.beginPath();
       ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
       ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
@@ -241,32 +217,23 @@
       ctx.stroke();
     }
   }
-  
-  // 绘制复杂背景（第二关）
   function drawComplexBackground(canvas, baseColor) {
     const ctx = canvas.getContext('2d');
     canvas.width = 320; 
     canvas.height = 100; 
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // 复杂背景图案
     const patternCanvas = document.createElement('canvas');
     patternCanvas.width = 10;
     patternCanvas.height = 10;
     const pctx = patternCanvas.getContext('2d');
-    
-    // 背景噪点
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < 500; i++) {
       pctx.fillStyle = generateSimilarColor(baseColor, 30);
       pctx.fillRect(Math.random() * 10, Math.random() * 10, 1, 1);
     }
-    
     const pattern = ctx.createPattern(patternCanvas, 'repeat');
     ctx.fillStyle = pattern;
     ctx.fillRect(0, 0, canvas.width, canvas.height);
-    
-    // 添加大量干扰线
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 150; i++) {
       ctx.beginPath();
       ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
       ctx.bezierCurveTo(
@@ -274,230 +241,190 @@
         Math.random() * canvas.width, Math.random() * canvas.height,
         Math.random() * canvas.width, Math.random() * canvas.height
       );
-      ctx.strokeStyle = generateSimilarColor(baseColor, -20);
+      ctx.strokeStyle = generateSimilarColor(baseColor, -15);
       ctx.lineWidth = 1;
       ctx.stroke();
     }
-    
-    // 添加大量噪点
-    for (let i = 0; i < 5000; i++) {
+    for (let i = 0; i < 10000; i++) {
       const x = Math.random() * canvas.width;
       const y = Math.random() * canvas.height;
       const radius = Math.random() * 1;
       ctx.beginPath();
       ctx.arc(x, y, radius, 0, Math.PI * 2, false);
-      ctx.fillStyle = generateSimilarColor(baseColor, -30);
+      ctx.fillStyle = generateSimilarColor(baseColor, -25);
       ctx.fill();
     }
   }
-  
-  // 绘制简单验证码文本（第一关）
   function drawSimpleCaptchaText(canvas, text, baseColor) {
     const ctx = canvas.getContext('2d');
     const charWidth = canvas.width / (text.length + 1);
-    
     ctx.font = "bold 40px Arial";
     ctx.textBaseline = 'middle';
-    
     for (let i = 0; i < text.length; i++) {
       const x = charWidth * (i + 1);
       const y = canvas.height / 2; 
-      const angle = (Math.random() * 10 - 5) * Math.PI / 180; // 极小旋转角度
-      
-      ctx.fillStyle = '#333'; // 高对比度黑色
-      
+      const angle = (Math.random() * 15 - 7.5) * Math.PI / 180;
+      ctx.fillStyle = generateSimilarColor(baseColor, -40);
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate(angle);
       ctx.fillText(text[i], 0, 0);
+      if (Math.random() > 0.7) {
+        ctx.fillStyle = generateSimilarColor(baseColor, -30);
+        ctx.fillText(text[i], 1, 1);
+      }
       ctx.restore();
     }
   }
-  
-  // 绘制复杂验证码文本（第二关）
   function drawComplexCaptchaText(canvas, text, baseColor) {
     const ctx = canvas.getContext('2d');
     const charWidth = canvas.width / (text.length + 0.5);
-    
-    ctx.font = "bold 32px Arial";
+    ctx.font = "bold 28px Arial";
     ctx.textBaseline = 'middle';
-    
     for (let i = 0; i < text.length; i++) {
-      const x = charWidth * (i + 0.7) + (Math.random() - 0.5) * 20;
-      const y = canvas.height / 2 + (Math.random() - 0.5) * 20; 
-      const angle = (Math.random() * 60 - 30) * Math.PI / 180; // 极大旋转角度
-      
-      // 每个字符颜色与背景高度相似
-      const charColor = generateSimilarColor(baseColor, -10);
+      const x = charWidth * (i + 0.7) + (Math.random() - 0.5) * 25;
+      const y = canvas.height / 2 + (Math.random() - 0.5) * 25; 
+      const angle = (Math.random() * 80 - 40) * Math.PI / 180;
+      const charColor = generateSimilarColor(baseColor, -25);
       ctx.fillStyle = charColor;
-      
       ctx.save();
       ctx.translate(x, y);
       ctx.rotate(angle);
       ctx.fillText(text[i], 0, 0);
-      
-      // 添加重叠字符干扰
-      if (Math.random() > 0.5) {
-        ctx.fillStyle = generateSimilarColor(baseColor, -20);
-        ctx.fillText(text[Math.floor(Math.random() * text.length)], 0, 0);
+      for (let j = 0; j < 3; j++) {
+        if (Math.random() > 0.5) {
+          ctx.fillStyle = generateSimilarColor(baseColor, -15 + j*5);
+          ctx.fillText(text[Math.floor(Math.random() * text.length)], 
+                      (Math.random() - 0.5) * 5, 
+                      (Math.random() - 0.5) * 5);
+        }
       }
-      
       ctx.restore();
     }
-    
-    // 添加与字符颜色相似的线条干扰
     ctx.strokeStyle = generateSimilarColor(baseColor, -20);
-    ctx.lineWidth = 2;
-    for (let i = 0; i < 30; i++) {
+    ctx.lineWidth = 1.5;
+    for (let i = 0; i < 50; i++) {
       ctx.beginPath();
       ctx.moveTo(Math.random() * canvas.width, Math.random() * canvas.height);
       ctx.lineTo(Math.random() * canvas.width, Math.random() * canvas.height);
       ctx.stroke();
     }
   }
-  
-  // 创建验证码图片
   function createCaptcha() {
     const captchaCanvas = document.getElementById('captchaCanvas');
     const baseColor = generateBaseColor();
-    
     if (currentLevel === 1) {
       captchaText = generateSimpleCaptchaText();
-      drawSimpleBackground(captchaCanvas, baseColor);
-      drawSimpleCaptchaText(captchaCanvas, captchaText, baseColor);
     } else {
       captchaText = generateComplexCaptchaText();
+    }
+    currentCaptcha = captchaText;
+    const tempText = captchaText;
+    captchaText = '';     
+    if (currentLevel === 1) {
+      drawSimpleBackground(captchaCanvas, baseColor);
+      drawSimpleCaptchaText(captchaCanvas, tempText, baseColor);
+    } else {
       drawComplexBackground(captchaCanvas, baseColor);
-      drawComplexCaptchaText(captchaCanvas, captchaText, baseColor);
+      drawComplexCaptchaText(captchaCanvas, tempText, baseColor);
     }
   }
-  
-  // 显示难度提升动画
+  function getCaptchaTextFromCanvas() {
+    return '';
+  }
   function showDifficultyTransition() {
     const transition = document.getElementById('difficultyTransition');
     const transitionText = transition.querySelector('.difficulty-text');
-    
-    // 重置状态
     transition.classList.remove('fade-out');
     transitionText.style.transform = 'scale(0.5)';
     transitionText.style.opacity = '0';
-    
-    // 显示过渡
     setTimeout(() => {
       transition.classList.add('active');
       setTimeout(() => {
         transitionText.style.transform = 'scale(2)';
         transitionText.style.opacity = '1';
-        
-        // 淡出过渡
         setTimeout(() => {
           transitionText.style.transform = 'scale(0.5)';
           transitionText.style.opacity = '0';
           transition.classList.remove('active');
           transition.classList.add('fade-out');
-          
-          // 更新UI
           document.getElementById('levelIndicator').textContent = '第2关：地狱验证码';
           createCaptcha();
         }, 1500);
       }, 100);
     }, 100);
   }
-  
-  // 显示难度降低动画
   function showLevelDownTransition() {
     const transition = document.getElementById('difficultyTransition');
     const transitionText = transition.querySelector('.difficulty-text');
     transitionText.textContent = '你个人机，采九朵莲，难度降低！';
-    
-    // 重置状态
     transition.classList.remove('fade-out');
     transitionText.style.transform = 'scale(0.5)';
     transitionText.style.opacity = '0';
-    
-    // 显示过渡
     setTimeout(() => {
       transition.classList.add('active');
       setTimeout(() => {
         transitionText.style.transform = 'scale(2)';
         transitionText.style.opacity = '1';
-        
-        // 淡出过渡
         setTimeout(() => {
           transitionText.style.transform = 'scale(0.5)';
           transitionText.style.opacity = '0';
           transition.classList.remove('active');
           transition.classList.add('fade-out');
-          transitionText.textContent = '难度飘升！';
-          
-          // 更新UI
+          transitionText.textContent = '难度提升！';
           document.getElementById('levelIndicator').textContent = '第1关：简单验证码';
           createCaptcha();
         }, 1500);
       }, 100);
     }, 100);
   }
-  
-  // 验证验证码
   function verifyCaptcha() {
     const messageElement = document.getElementById('message');
     const userInput = document.getElementById('captchaInput').value.trim();
-    
+    const isCorrect = userInput === currentCaptcha;
     if (currentLevel === 1) {
-      // 第一关验证
-      if (userInput === captchaText) {
+      if (isCorrect) {
         messageElement.textContent = '验证成功！准备进入下一关...';
         messageElement.className = 'message success animation-pulse';
-        
         setTimeout(() => {
           currentLevel = 2;
           showDifficultyTransition();
           messageElement.textContent = '';
           messageElement.className = 'message';
           document.getElementById('captchaInput').value = '';
-          parent.postMessage('ok', '*'); // 通知父窗口第一关通过
+          parent.postMessage('ok', '*'); 
         }, 1500);
       } else {
         messageElement.textContent = '验证码错误，请重试';
         messageElement.className = 'message error';
         document.getElementById('captchaInput').value = '';
         createCaptcha();
-        parent.postMessage('notok', '*'); // 通知父窗口验证失败
-      }
+        parent.postMessage('notok', '*');   
+    }
     } else {
-      // 第二关验证
-      if (userInput === captchaText) {
+      if (isCorrect) {
         messageElement.textContent = '恭喜！人机验证成功！';
         messageElement.className = 'message success';
         document.getElementById('verifyButton').disabled = true;
         document.getElementById('verifyButton').style.backgroundColor = '#10b981';
-        parent.postMessage('ok', '*'); // 通知父窗口验证成功
+        parent.postMessage('ok', '*');
       } else {
         messageElement.textContent = '验证码错误，已退回第一关';
         messageElement.className = 'message error';
         document.getElementById('captchaInput').value = '';
-        
-        // 退回第一关
-        currentLevel = 1;
+         currentLevel = 1;
         showLevelDownTransition();
-        parent.postMessage('notok', '*'); // 通知父窗口验证失败
+        parent.postMessage('notok', '*');
       }
     }
   }
-  
-  // 初始化事件监听
   function initEventListeners() {
-    // 验证码输入框清空消息
     document.getElementById('captchaInput').addEventListener('input', () => {
       document.getElementById('message').textContent = '';
       document.getElementById('message').className = 'message';
     });
-    
-    // 验证按钮点击事件
-    document.getElementById('verifyButton').addEventListener('click', verifyCaptcha);
+     document.getElementById('verifyButton').addEventListener('click', verifyCaptcha);
   }
-  
-  // 初始化游戏
   document.addEventListener('DOMContentLoaded', () => {
     createCaptcha();
     initEventListeners();
