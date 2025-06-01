@@ -1,0 +1,259 @@
+<body>
+  <!DOCTYPE html>
+  <html lang="zh-CN">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="OI重开模拟器是一个模拟信息学竞赛（OI）选手生涯的文字游戏。体验从高一到高二的OI比赛生涯，包括CSP-S、NOIP、WC、省选、NOI等比赛。">
+    <meta name="keywords" content="OI,信息学竞赛,模拟游戏,文字游戏,NOIP,CSP,NOI">
+    <meta name="author" content="Qingyu, Little09, Milmon">
+    <meta name="robots" content="index,follow">
+    <title>OI 重开模拟游戏</title>
+    <link rel="stylesheet" href="style.css"/>
+    <script src="problemPool.js?v=1"></script>
+    <script src="problemPoolIOI.js?v=1"></script>
+    <script src="game.js?v=1"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <!-- 玩家属性面板 -->
+      <div class="player-stats-panel" id="player-stats-panel">
+        <div class="player-stats">
+          <h3>玩家属性</h3>
+            <div class="player-stats-detail">
+              <p data-tooltip="指引你前进！">决心: <span id="player-determination">500</span></p>
+              <p data-tooltip="影响所有操作的成功率">心态: <span id="player-mood">10</span></p>
+              <p data-tooltip="促进动态规划题目的思考">动态规划: <span id="player-dp">0</span></p>
+              <p data-tooltip="促进数据结构题目的思考">数据结构: <span id="player-ds">0</span></p>
+              <p data-tooltip="促进字符串题目的思考">字符串: <span id="player-string">0</span></p>
+              <p data-tooltip="促进图论题目的思考">图论: <span id="player-graph">0</span></p>
+              <p data-tooltip="促进组合计数题目的思考">组合计数: <span id="player-combinatorics">0</span></p>
+              <p data-tooltip="促进计算几何题目的思考">计算几何: <span id="player-geometry">0</span></p>
+              <p data-tooltip="促进线性代数题目的思考">线性代数: <span id="player-linearalgebra">0</span></p>
+              <p data-tooltip="促进博弈论题目的思考">博弈论: <span id="player-gametheory">0</span></p>
+              <p data-tooltip="促进构造题目的思考">构造: <span id="player-construction">0</span></p>
+              <p data-tooltip="促进多项式题目的思考">多项式: <span id="player-polynomial">0</span></p>
+              <p data-tooltip="促进数论题目的思考">数论: <span id="player-numbertheory">0</span></p>
+              <p data-tooltip="增加查看模糊题目数据的概率">经验: <span id="player-experience">0</span></p>
+              <p data-tooltip="增大题目思考的成功率，引导你想出正确思路">思维: <span id="player-thinking">0</span></p>
+              <p data-tooltip="增大代码实现的成功率，引导你写出正确代码">代码: <span id="player-coding">0</span></p>
+              <p data-tooltip="细心的人挂分少" id="carefulness-stat" style="display: none;">细心: <span
+                  id="player-carefulness">0</span></p>
+              <p data-tooltip="加快代码编写速度" id="quickness-stat" style="display: none;">迅捷: <span id="player-quickness">0</span>
+              </p>
+              <p data-tooltip="影响心态变化幅度" id="mental-stat" style="display: none;">心理素质: <span id="player-mental">0</span></p>
+              <p data-tooltip="万一退役之后…" id="culture-stat" style="display: none;">文化课: <span id="player-culture">0</span></p>
+            </div>
+        </div>
+      </div>
+      <!-- 游戏主界面 -->
+      <div class="game-panel">
+        <!-- 开始界面 -->
+        <div class="start-screen" id="start-screen">
+          <h1 id="game-title">OI 比赛模拟器</h1>
+          <p>这是一个由 jsntzth 制作的游戏</p>
+          <div class="start-buttons" style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+            <button onclick="showAdvancedMode()" class="btn blue">正常模式</button>
+            <button onclick="showChangelog()" class="btn purple">更新日志</button>
+          </div>
+          <div class="changelog-content"
+            style="display: none; max-height: 500px; overflow-y: auto; padding: 20px; background-color: #f8f9fa; border-radius: 8px; margin: 20px auto; text-align: left; max-width: 800px;">
+            <div>
+              
+              <h3 style="color: #4a90e2;">TODO</h3>
+              <ul style="list-style-type: disc; padding-left: 20px;">
+                <li>你猜，捐款我就告诉你</li>
+              </ul>
+              <h3 style="color: #4a90e2;">1970.13.32</h3>
+              <ul style="list-style-type: disc; padding-left: 20px;">
+                <li>你猜，捐款我就告诉你</li>
+              </ul>
+            </div>
+            <div style="text-align: center; margin-top: 20px;">
+              <button onclick="backToMainMenu()" class="btn blue">返回主菜单</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 难度选择界面 -->
+        <div class="difficulty-screen" id="difficulty-screen" style="display: none;">
+          <h2>选择难度</h2>
+          <div class="difficulty-options">
+            <button onclick="startAdvancedMode('cheat')">开挂</button>
+            <button onclick="startAdvancedMode('easy')">简单</button>
+            <button onclick="startAdvancedMode('normal')">普通</button>
+            <button onclick="startAdvancedMode('hard')">困难</button>
+            <button onclick="startAdvancedMode('expert')">专家</button>
+          </div>
+          <button onclick="backToMainMenu()" style="margin-top: 20px;">返回主菜单</button>
+        </div>
+
+        <!-- 在game-panel内添加新剧情面板（放在allocate-panel之前） -->
+        <div class="pre-story-panel" id="pre-story-panel" style="display: none;">
+          <h2 id="pre-story-title">我重生了</h2>
+          <div class="story-content" id="pre-story-content">
+            <!-- 剧情内容将通过JavaScript动态设置 -->
+          </div>
+        </div>
+
+        <!-- 添加天赋分配面板 -->
+        <div class="allocate-panel" id="allocate-panel" style="display: none;">
+          <h2>分配天赋点</h2>
+          <div class="allocate-options">
+            <p style="margin-bottom: 10px;">可分配的知识点：<span id="remaining-points">15</span> 点</p>
+            <div class="allocate-option">
+              <label for="dp">动态规划:</label>
+              <input type="number" id="dp" min="0" max="10" value="0">
+            </div>
+            <div class="allocate-option">
+              <label for="ds">数据结构:</label>
+              <input type="number" id="ds" min="0" max="10" value="0">
+            </div>
+            <div class="allocate-option">
+              <label for="string">字符串:</label>
+              <input type="number" id="string" min="0" max="10" value="0">
+            </div>
+            <div class="allocate-option">
+              <label for="graph">图论:</label>
+              <input type="number" id="graph" min="0" max="10" value="0">
+            </div>
+            <div class="allocate-option">
+              <label for="combinatorics">组合计数:</label>
+              <input type="number" id="combinatorics" min="0" max="10" value="0">
+            </div>
+            <p style="margin: 15px 0 10px 0;">以下知识点固定为0，不可调整：</p>
+            <div class="allocate-option">
+              <label for="geometry">计算几何:</label>
+              <input type="number" id="geometry" value="0" readonly disabled>
+            </div>
+            <div class="allocate-option">
+              <label for="linearalgebra">线性代数:</label>
+              <input type="number" id="linearalgebra" value="0" readonly disabled>
+            </div>
+            <div class="allocate-option">
+              <label for="gametheory">博弈论:</label>
+              <input type="number" id="gametheory" value="0" readonly disabled>
+            </div>
+            <div class="allocate-option">
+              <label for="construction">构造:</label>
+              <input type="number" id="construction" value="0" readonly disabled>
+            </div>
+            <div class="allocate-option">
+              <label for="polynomial">多项式:</label>
+              <input type="number" id="polynomial" value="0" readonly disabled>
+            </div>
+            <div class="allocate-option">
+              <label for="numbertheory">数论:</label>
+              <input type="number" id="numbertheory" value="0" readonly disabled>
+            </div>
+            <div class="allocate-option">
+              <label for="adhoc">杂题:</label>
+              <input type="number" id="adhoc" value="0" readonly disabled>
+            </div>
+            <p style="margin: 15px 0 10px 0;">可分配的能力值：<span id="remaining-ability-points">10</span> 点</p>
+            <div class="allocate-option">
+              <label for="thinking">思维能力:</label>
+              <input type="number" id="thinking" min="0" max="10" value="0">
+            </div>
+            <div class="allocate-option">
+              <label for="coding">代码能力:</label>
+              <input type="number" id="coding" min="0" max="10" value="0">
+            </div>
+            <div class="allocate-option">
+              <label for="carefulness">细心能力:</label>
+              <input type="number" id="carefulness" min="0" max="10" value="0">
+            </div>
+            <div class="allocate-option">
+              <label for="experience">经验能力:</label>
+              <input type="number" id="experience" min="0" max="10" value="0">
+            </div>
+            <div class="allocate-option">
+              <label for="quickness">迅捷能力:</label>
+              <input type="number" id="quickness" min="0" max="10" value="0">
+            </div>
+            <div class="allocate-option">
+              <label for="mental">心理素质:</label>
+              <input type="number" id="mental" min="0" max="10" value="0">
+            </div>
+
+          </div>
+          <button onclick="confirmAllocation()" class="btn">确认分配</button>
+        </div>
+
+        <div class="story-panel" id="story-panel" style="display: none;">
+          <h2>剧情标题</h2>
+          <p>
+            这里是剧情内容。你可以在这里写一段背景故事，描述玩家即将面临的挑战。
+            例如：你是一名 OI 选手，正在参加一场重要的比赛。你需要合理分配时间，完成题目。
+          </p>
+          <button onclick="startGame()">进入比赛</button>
+        </div>
+
+        <!-- 游戏主界面 -->
+        <div class="game-interface" id="game-interface" style="display: none;">
+          <h2 style="color: #1a237e; margin-bottom: 20px; font-size: 24px;" id="contest-name">NOIP普及组</h2>
+          <div class="status">
+            <p>剩余时间点: <span id="time-points">24</span></p>
+            <p>当前题目: <span id="current-problem">T1</span></p>
+          </div>
+          <div class="actions">
+            <button id="prev-problem-btn" class="btn purple" onclick="prevProblem()">上一题</button>
+            <button id="next-problem-btn" class="btn purple" onclick="nextProblem()">下一题</button>
+          </div>
+          <div id="sub-problems"></div>
+        </div>
+
+        <!-- 在game-panel内添加训练事件面板 -->
+        <div class="training-event-panel" id="training-event-panel" style="display: none;">
+          <h2>NOIP比赛即将到来(1/${totalTrainingEvents})</h2>
+          <div class="event-options" id="event-options">
+            <!-- 事件选项将通过JavaScript动态添加 -->
+          </div>
+        </div>
+
+        <!-- 更新日志界面 -->
+        <div class="changelog-screen" id="changelog-screen"
+          style="display: none; background-color: white; border-radius: 12px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1); max-width: 800px; margin: 20px auto; padding: 20px;">
+          <h2 style="color: #1a237e; margin-bottom: 20px; text-align: center;">更新日志</h2>
+          <div class="changelog-content"
+            style="max-height: 500px; overflow-y: auto; padding: 20px; background-color: #f8f9fa; border-radius: 8px; margin-bottom: 20px;">
+            <div class="changelog-entry">
+              <h3 style="color: #4a90e2;">2024.3.19 - v1.0.0</h3>
+              <ul style="list-style-type: disc; padding-left: 20px;">
+                <li>游戏首次发布</li>
+                <li>完整的OI比赛生涯模拟</li>
+                <li>包含CSP-S、NOIP、WC、省选、NOI等比赛</li>
+                <li>丰富的训练事件系统</li>
+                <li>完整的商店和属性系统</li>
+                <li>四种难度模式选择</li>
+              </ul>
+            </div>
+          </div>
+          <div style="text-align: center;">
+            <button onclick="backToMainMenu()" class="btn blue">返回主菜单</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 日志面板 -->
+      <div class="log-panel" id="log-panel">
+        <h3>游戏日志</h3>
+        <div id="log"></div>
+      </div>
+    </div>
+
+    <!-- 随机事件剧情面板 -->
+    <div class="event-panel" id="event-panel">
+      <div class="event-content">
+        <h2 id="event-title"></h2>
+        <p id="random-event-description"></p>
+        <p id="event-effect"></p>
+        <button onclick="closeEvent()">继续</button>
+      </div>
+    </div>
+  </body>
+
+  </html>
+  <!-- 游戏结束 -->
