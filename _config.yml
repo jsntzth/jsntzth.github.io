@@ -329,5 +329,6 @@ defaults:
 comments:
   provider: "utterances"
   utterances:
-    theme: "github-dark"
+    theme: "github-light"
     issue_term: "pathname"
+    repo: "jsntzth/jsntzth.github.io"
