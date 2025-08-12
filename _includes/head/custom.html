@@ -3,3 +3,16 @@
 <!-- insert favicons. use https://realfavicongenerator.net/ -->
 
 <!-- end custom head snippets -->
+<!-- 支持 LaTeX 公式渲染 -->
+<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<script>
+  MathJax.config={
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],  // 行内公式用 $...$ 或 \(...\)
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]  // 块级公式用 $$...$$ 或 \[...\]
+    },
+    svg: {
+      fontCache: 'global'
+    }
+  };
+</script>
