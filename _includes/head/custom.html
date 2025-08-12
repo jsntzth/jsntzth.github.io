@@ -1,25 +1,26 @@
 <!-- start custom head snippets -->
 
-<!-- insert favicons. use https://realfavicongenerator.net/ -->
-
-<!-- 支持 LaTeX 公式渲染 -->
-<script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-<script>
-  MathJax.config={
-    tex: {
-      inlineMath: [['$', '$'], ['\\(', '\\)']],
-      displayMath: [['$$', '$$'], ['\\[', '\\]']]
+<!-- MathJax 配置 -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    tex2jax: {
+      inlineMath: [ ['$', '$'], ["\\(", "\\)"] ],
+      displayMath: [ ['$$', '$$'], ["\\[", "\\]"] ],
+      processEscapes: true,
+      processEnvironments: true
     },
-    svg: {
-      fontCache: 'global'
+    // 适配深色主题
+    "HTML-CSS": {
+      availableFonts: ["STIX", "TeX"],
+      linebreaks: { automatic: true },
+      styles: {
+        ".MathJax_Display": { "color": "#f0f0f0" }
+      }
     }
-  };
+  });
 </script>
-<style>
-  .MathJax {
-    font-size: 1em !important;
-    color: inherit !important;
-  }
-</style>
+<script type="text/javascript" async
+  src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
 
 <!-- end custom head snippets -->
