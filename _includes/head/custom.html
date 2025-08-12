@@ -2,17 +2,24 @@
 
 <!-- insert favicons. use https://realfavicongenerator.net/ -->
 
-<!-- end custom head snippets -->
 <!-- 支持 LaTeX 公式渲染 -->
 <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
 <script>
   MathJax.config={
     tex: {
-      inlineMath: [['$', '$'], ['\\(', '\\)']],  // 行内公式用 $...$ 或 \(...\)
-      displayMath: [['$$', '$$'], ['\\[', '\\]']]  // 块级公式用 $$...$$ 或 \[...\]
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']]
     },
     svg: {
       fontCache: 'global'
     }
   };
 </script>
+<style>
+  .MathJax {
+    font-size: 1em !important;
+    color: inherit !important;
+  }
+</style>
+
+<!-- end custom head snippets -->
