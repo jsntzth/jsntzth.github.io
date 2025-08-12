@@ -34,7 +34,7 @@ enable_copy_code_button  : true # true, false (default)
 copyright                : # "copyright" name, defaults to site.title
 copyright_url            : # "copyright" URL, defaults to site.url
 comments:
-  provider: "utterances"
+  provider: #"utterances"
   disqus:
     shortname            : # https://help.disqus.com/customer/portal/articles/466208-what-s-a-shortname-
   discourse:
@@ -45,9 +45,9 @@ comments:
     num_posts            : # 5 (default)
     colorscheme          : # "light" (default), "dark"
   utterances:
-    theme: "github-dark"
-    issue_term: "pathname"
-    repo: "jsntzth/jsntzth.github.io"
+    theme: #"github-dark"
+    issue_term: #"pathname"
+    #repo: #"jsntzth/jsntzth.github.io"
   giscus:
     repo_id              : # Shown during giscus setup at https://giscus.app
     category_name        : # Full text name of the category
