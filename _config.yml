@@ -116,7 +116,7 @@ analytics:
 # Site Author
 author:
   name             : "jsntzth"
-  avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
+  avatar           : "https://cdn.luogu.com.cn/upload/image_hosting/uhiclg5g.png"
   bio              : "我是一只蒟蒻。"
   location         : "江苏-南通"
   email            :
