@@ -23,4 +23,13 @@
 </div>
 {% endif %}
 
+<audio 
+  src="https://raw.githubusercontent.com/jsntzth/jsntzth.github.io/main/lemon.mp3"
+  controls
+  preload="metadata"
+  loop
+  style="width: 100%; max-width: 300px; margin: 1rem auto; display: block;">
+  您的浏览器不支持 audio 标签，请更新浏览器。
+</audio>
+
 <div class="page__footer-copyright">&copy; {% assign site_time = site.time | date: '%Y' %}{% if site.footer.since and site_time != site.footer.since %}{{ site.footer.since }} - {% endif %}{{ site_time }} <a href="{{ site.copyright_url | default: site.url }}">{{ site.copyright | default: site.title | escape_once | strip }}</a>.</div>
