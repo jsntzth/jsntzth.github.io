@@ -317,7 +317,6 @@ compress_html:
 
 # Defaults
 defaults:
-  # _posts
   - scope:
       path: ""
       type: posts
@@ -328,3 +327,10 @@ defaults:
       comments: false
       share: true
       related: true
+  - scope:
+      path: "*.mp3"
+    values:
+      mime_type: "audio/mpeg"
+
+
+
