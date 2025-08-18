@@ -6,13 +6,23 @@
 # `jekyll serve`. If you change this file, please restart the server process.
 
 # Theme Settings
-#
-# Review documentation to determine if you should use `theme` or `remote_theme`
-# https://mmistakes.github.io/minimal-mistakes/docs/quick-start-guide/#installing-the-theme
-
-# theme                  : "minimal-mistakes-jekyll"
+# 关键：删除重复的 remote_theme 和 minimal_mistakes_skin 配置
 remote_theme           : "mmistakes/minimal-mistakes"
-minimal_mistakes_skin    : "dark" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
+minimal_mistakes_skin  : "default"  # 必须是 default，否则强制深色，主题切换失效
+
+# 导航菜单配置（Minimal Mistakes 主题会读取这里生成导航，确保顺序正确）
+header:
+  links:
+    - title: "首页"
+      url: /
+    - title: "分类"
+      url: /categories/
+    - title: "标签"
+      url: /tags/
+    - title: "友链"
+      url: /friends/
+    - title: "关于"
+      url: /about/
 
 # Site Settings
 locale                   : "zh-CN"
@@ -83,6 +93,7 @@ algolia:
 google:
   search_engine_id       : # YOUR_SEARCH_ENGINE_ID
   instant_search         : # false (default), true
+
 # SEO Related
 google_site_verification :
 bing_site_verification   :
@@ -112,7 +123,6 @@ analytics:
     tracking_id          :
     anonymize_ip         : # true, false (default)
 
-
 # Site Author
 author:
   name             : "jsntzth"
@@ -123,7 +133,7 @@ author:
   links:
     - label: "Email"
       icon: "fas fa-fw fa-envelope-square"
-      url: "3010604662@qq.com"
+      url: "mailto:3010604662@qq.com" # 补充 mailto: 确保邮件链接可点击
     - label: "Website"
       icon: "fas fa-fw fa-link"
       # url: "https://your-website.com"
@@ -163,7 +173,6 @@ footer:
       # url:
   since: "2013"
 
-
 # Reading Files
 include:
   - .htaccess
@@ -202,14 +211,12 @@ keep_files:
 encoding: "utf-8"
 markdown_ext: "markdown,mkdown,mkdn,mkd,md"
 
-
 # Conversion
 markdown: kramdown
 highlighter: rouge
 lsi: false
 excerpt_separator: "\n\n"
 incremental: false
-
 
 # Markdown Processing
 kramdown:
@@ -229,11 +236,9 @@ sass:
   sass_dir: _sass
   style: compressed # https://sass-lang.com/documentation/file.SASS_REFERENCE.html#output_style
 
-
 # Outputting
 permalink: /:categories/:title/
 timezone: Asia/Shanghai
-
 
 # Pagination with jekyll-paginate
 paginate: 5 # amount of posts to show
@@ -260,7 +265,6 @@ pagination:
     before: 2
     after: 2
 
-
 # Plugins (previously gems:)
 plugins:
   - jekyll-paginate
@@ -276,7 +280,6 @@ whitelist:
   - jekyll-gist
   - jekyll-feed
   - jekyll-include-cache
-
 
 # Archives
 #  Type
@@ -306,14 +309,12 @@ tag_archive:
 #     category: /categories/:name/
 #     tag: /tags/:name/
 
-
 # HTML Compression
 # - https://jch.penibelst.de/
 compress_html:
   clippings: all
   ignore:
     envs: development
-
 
 # Defaults
 defaults:
@@ -331,6 +332,3 @@ defaults:
       path: "*.mp3"
     values:
       mime_type: "audio/mpeg"
-
-
-
