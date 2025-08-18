@@ -1,17 +1,67 @@
-<head>
-  <meta charset="UTF-8">
-  <!-- 手机端适配（避免样式错乱） -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- 页面标题 -->
-  <title>
-    {% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}
-  </title>
-  <!-- 核心：加载CSS（样式入口） -->
-  <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
-  <!-- 图标库（导航/按钮图标） -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
-  <!-- 博客图标（可选，需在_config.yml配置favicon路径） -->
-  {% if site.favicon %}
-    <link rel="icon" href="{{ site.favicon | relative_url }}">
-  {% endif %}
-</head>
+<header class="masthead" role="banner">
+  <div class="wrap">
+    <!-- 导航菜单样式（确保横向排列） -->
+    <style>
+      .main-nav ul {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: nowrap !important;
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        gap: 1.5rem !important;
+        align-items: center !important;
+      }
+      
+      .main-nav li {
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      
+      .main-nav a {
+        text-decoration: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.3rem !important;
+      }
+      
+      .theme-switcher-btn {
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 0.3rem !important;
+      }
+    </style>
+
+    <nav class="main-nav" role="navigation">
+      <ul>
+        <li><a href="{{ '/' | relative_url }}"><i class="fa fa-home"></i> 首页</a></li>
+        <li><a href="{{ '/categories/' | relative_url }}"><i class="fa fa-folder"></i> 分类</a></li>
+        <li><a href="{{ '/tags/' | relative_url }}"><i class="fa fa-tags"></i> 标签</a></li>
+        <li><a href="{{ '/friends/' | relative_url }}"><i class="fa fa-link"></i> 友链</a></li>
+        <li><a href="{{ '/about/' | relative_url }}"><i class="fa fa-user"></i> 关于</a></li>
+        
+        <!-- 主题切换器 -->
+        <li class="theme-switcher-item">
+          <div class="theme-switcher-container">
+            <button class="theme-switcher-btn"><i class="fa fa-paint-brush"></i> 普通深色 ▼</button>
+            <ul class="theme-options hidden">
+              <li data-theme="light">普通浅色</li>
+              <li data-theme="dark">普通深色</li>
+              <li data-theme="light-img">带图浅色</li>
+              <li data-theme="dark-img">带图深色</li>
+            </ul>
+          </div>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- 确保CSS和JS正确导入（关键代码） -->
+<!-- 1. 主样式表 -->
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+<!-- 2. Font Awesome图标库 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<!-- 3. 主题切换脚本 -->
+<script src="{{ '/assets/js/theme-switcher.js' | relative_url }}"></script>
+    
