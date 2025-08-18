@@ -1,56 +1,39 @@
-{% if page.header.overlay_color or page.header.overlay_image or page.header.image %}
-  {% include page__hero.html %}
-{% elsif page.header.video.id and page.header.video.provider %}
-  {% include page__hero_video.html %}
-{% endif %}
-
-{% if page.url != "/" and site.breadcrumbs %}
-  {% unless paginator %}
-    {% include breadcrumbs.html %}
-  {% endunless %}
-{% endif %}
-
-<!-- 新增：引用 CSS 文件 -->
-<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
-
-<header class="masthead">
+<!-- _includes/header.html 完整代码 -->
+<header class="masthead" role="banner">
   <div class="wrap">
-    {% if site.logo %}
-      <a href="https://jsntzth.github.io/" class="site-logo" rel="home" title="{{ site.title }}">
-        <img src="{{ site.logo | relative_url }}" class="site-logo-img animated fadeIn" alt="{{ site.title }}">
-      </a>
-    {% endif %}
-    {% if site.title %}
-      <h1 class="site-title animated fadeIn"><a href="https://jsntzth.github.io/" rel="home">{{ site.title }}</a></h1>
-    {% endif %}
-    {% if site.description %}
-      <p class="site-description animated fadeIn" itemprop="description">{{ site.description }}</p>
-    {% endif %}
+    <!-- 标题与副标题容器（确保副标题在标题下方） -->
+    <div class="site-header">
+      <a class="site-title" href="{{ '/' | relative_url }}">jsntzth 的博客</a>
+      <!-- 副标题（一个不错的博客），在标题下方 -->
+      <p class="site-subtitle">{{ site.description | default: "一个不错的博客。" }}</p>
+    </div>
 
-    <!-- 导航菜单核心代码 -->
-    <nav class="main-nav">
-      <ul>
-        <!-- 首页 -->
-        <li><a href="https://jsntzth.github.io/">首页</a></li>
-        <!-- 分类 -->
-        <li><a href="{{ '/categories/' | relative_url }}">分类</a></li>
-        <!-- 标签 -->
-        <li><a href="{{ '/tags/' | relative_url }}">标签</a></li>
-        <!-- 友链 -->
-        <li><a href="{{ '/friends/' | relative_url }}">友链</a></li>
-        <!-- 关于 -->
-        <li><a href="{{ '/about/' | relative_url }}">关于</a></li>
-        <!-- 主题切换 -->
-        <li class="theme-switcher-container">
-          <button id="themeSwitcherBtn" class="theme-switcher-btn">切换主题 ▼</button>
-          <ul id="themeOptions" class="theme-options hidden">
-            <li data-theme="light">浅色模式</li>
-            <li data-theme="dark">深色模式</li>
-            <li data-theme="light-img">带图浅色</li>
-            <li data-theme="dark-img">带图深色</li>
-          </ul>
-        </li>
-      </ul>
-    </nav>
+    <!-- 导航菜单 + 主题切换器 容器（横向排列） -->
+    <div class="nav-and-theme">
+      <!-- 导航菜单（首页/分类等） -->
+      <nav class="main-nav" role="navigation">
+        <ul>
+          <li><a href="{{ '/' | relative_url }}">首页</a></li>
+          <li><a href="{{ '/categories/' | relative_url }}">分类</a></li>
+          <li><a href="{{ '/tags/' | relative_url }}">标签</a></li>
+          <li><a href="{{ '/friends/' | relative_url }}">友链</a></li>
+          <li><a href="{{ '/about/' | relative_url }}">关于</a></li>
+        </ul>
+      </nav>
+
+      <!-- 主题切换器 -->
+      <div class="theme-switcher-container">
+        <button class="theme-switcher-btn">普通深色 ▼</button>
+        <ul class="theme-options hidden">
+          <li data-theme="light">普通浅色</li>
+          <li data-theme="dark">普通深色</li>
+          <li data-theme="light-img">带图浅色</li>
+          <li data-theme="dark-img">带图深色</li>
+        </ul>
+      </div>
+    </div>
   </div>
 </header>
+
+<!-- 引入主题切换脚本（确保在HTML末尾，避免加载顺序问题） -->
+<script src="{{ '/assets/js/theme-switcher.js' | relative_url }}"></script>
