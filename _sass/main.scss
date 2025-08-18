@@ -5,189 +5,259 @@ search: false
 
 @charset "utf-8";
 
-// 导入主题核心样式（Minimal Mistakes 主题基础样式，确保优先级正确）
-@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // 主题皮肤（变量定义）
-@import "minimal-mistakes"; // 主题主样式（布局、组件等核心样式）
+// 导入主题核心样式（确保先加载主题基础样式）
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}";
+@import "minimal-mistakes";
 
-// 1. 自定义主题切换器样式（主题切换按钮+选项面板）
+// ------------------------------
+// 1. 导航栏布局修复（核心解决位置错乱）
+// ------------------------------
+.masthead {
+  // 清除默认内外边距，避免布局偏移
+  margin: 0;
+  padding: 0;
+
+  .wrap {
+    display: flex !important;          // 强制水平布局
+    justify-content: space-between !important; // 标题左，菜单右
+    align-items: center !important;    // 垂直居中对齐
+    flex-wrap: wrap !important;        // 小屏幕自动换行
+    padding: 0.8rem 5% !important;     // 左右留5%间距，避免贴边
+    max-width: 1400px !important;      // 限制最大宽度，宽屏不分散
+    margin: 0 auto !important;         // 容器水平居中
+  }
+
+  // 博客标题样式优化
+  .site-title {
+    margin: 0 !important;              // 清除默认外边距
+    padding: 0 !important;
+    font-size: 1.5rem !important;      // 适当调整标题大小
+  }
+
+  // 主导航菜单
+  .main-nav {
+    ul {
+      display: flex !important;        // 菜单水平排列
+      list-style: none !important;     // 清除列表圆点
+      margin: 0 !important;            // 清除默认外边距
+      padding: 0 !important;           // 清除默认内边距
+      gap: 1.5rem !important;          // 菜单项间距
+    }
+
+    a {
+      text-decoration: none !important; // 清除下划线
+      color: inherit !important;        // 继承主题文字色
+      padding: 0.3rem 0 !important;
+      font-size: 0.95rem !important;
+      transition: color 0.2s ease !important;
+
+      &:hover {
+        color: #4299e1 !important;      // 统一hover颜色（蓝色）
+      }
+    }
+  }
+
+  // 移除重复标题和Quick-Start Guide的残留样式
+  .hidden-links {
+    display: none !important;          // 彻底隐藏不需要的链接
+  }
+}
+
+// ------------------------------
+// 2. 主题切换器样式
+// ------------------------------
 .theme-switcher-container {
   position: relative;
   display: inline-block;
-  margin-left: 1rem; // 与导航菜单错开间距
+  margin-left: 1rem;
+
+  .theme-switcher-btn {
+    background: transparent;
+    border: none;
+    color: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+    padding: 0.5rem 0.8rem;
+    border-radius: 4px;
+    transition: background 0.3s ease;
+
+    &:hover {
+      background: rgba(0, 0, 0, 0.1);
+    }
+  }
+
+  .theme-options {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 4px;
+    list-style: none;
+    margin: 0;
+    padding: 0.5rem 0;
+    min-width: 120px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+
+    li {
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: #f7f7f7;
+      }
+    }
+  }
 }
 
-.theme-switcher-btn {
-  background: transparent;
-  border: none;
-  color: inherit; // 继承当前主题文字颜色，避免深色模式下看不见
-  font-size: 0.9rem;
-  cursor: pointer;
-  padding: 0.5rem 0.8rem;
-  border-radius: 4px;
-  transition: background 0.3s ease; //  hover 过渡更丝滑
+// ------------------------------
+// 3. 主题样式定义（四种主题）
+// ------------------------------
+body {
+  // 普通浅色
+  &.theme-light {
+    background-color: #fff !important;
+    color: #2d3748 !important;
+
+    .theme-switcher-btn:hover {
+      background: rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .theme-options {
+      background: #fff !important;
+      border-color: #eee !important;
+
+      li {
+        color: #2d3748 !important;
+
+        &:hover {
+          background: #f7f7f7 !important;
+        }
+      }
+    }
+  }
+
+  // 普通深色
+  &.theme-dark {
+    background-color: #1a202c !important;
+    color: #f0f0f0 !important;
+
+    .theme-switcher-btn:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .theme-options {
+      background: #2d3748 !important;
+      border-color: #4a5568 !important;
+
+      li {
+        color: #f0f0f0 !important;
+
+        &:hover {
+          background: #4a5568 !important;
+        }
+      }
+    }
+  }
+
+  // 带图浅色
+  &.theme-light-img {
+    background-color: #fff !important;
+    background-image: url("{{ 'https://youke1.picui.cn/s1/2025/08/18/68a2dcb6a903e.png' | relative_url }}") !important;
+    background-repeat: repeat !important;
+    color: #2d3748 !important;
+
+    .theme-switcher-btn:hover {
+      background: rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .theme-options {
+      background: #fff !important;
+      border-color: #eee !important;
+
+      li {
+        color: #2d3748 !important;
+
+        &:hover {
+          background: #f7f7f7 !important;
+        }
+      }
+    }
+  }
+
+  // 带图深色
+  &.theme-dark-img {
+    background-color: #1a202c !important;
+    background-image: url("{{ 'https://youke1.picui.cn/s1/2025/08/18/68a2dcb6a903e.png' | relative_url }}") !important;
+    background-repeat: repeat !important;
+    color: #f0f0f0 !important;
+
+    .theme-switcher-btn:hover {
+      background: rgba(255, 255, 255, 0.1) !important;
+    }
+
+    .theme-options {
+      background: #2d3748 !important;
+      border-color: #4a5568 !important;
+
+      li {
+        color: #f0f0f0 !important;
+
+        &:hover {
+          background: #4a5568 !important;
+        }
+      }
+    }
+  }
 }
 
-.theme-switcher-btn:hover {
-  background: rgba(0, 0, 0, 0.1); // 浅色模式下悬停背景
+// ------------------------------
+// 4. 代码块样式适配
+// ------------------------------
+.highlighter-rouge {
+  padding: 1rem !important;
+  border-radius: 4px !important;
+  overflow-x: auto !important; // 长代码横向滚动
+
+  body.theme-light &,
+  body.theme-light-img & {
+    background-color: #f7f7f7 !important;
+    color: #2d3748 !important;
+  }
+
+  body.theme-dark &,
+  body.theme-dark-img & {
+    background-color: #2d3748 !important;
+    color: #f0f0f0 !important;
+  }
 }
 
-// 深色模式（含带图深色）下的按钮悬停样式
-body.theme-dark .theme-switcher-btn:hover,
-body.theme-dark-img .theme-switcher-btn:hover {
-  background: rgba(255, 255, 255, 0.1); // 深色背景下悬停用浅色透明
-}
-
-.theme-options {
-  position: absolute;
-  top: 100%; // 选项面板在按钮正下方
-  right: 0; // 选项面板右对齐按钮
-  background: #fff; // 浅色模式面板背景
-  border: 1px solid #eee;
-  border-radius: 4px;
-  list-style: none;
-  margin: 0;
-  padding: 0.5rem 0;
-  min-width: 120px; // 固定选项面板宽度
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); // 轻微阴影增强层次感
-  z-index: 999; // 确保面板在最上层，不被其他元素遮挡
-}
-
-// 深色模式（含带图深色）下的选项面板样式
-body.theme-dark .theme-options,
-body.theme-dark-img .theme-options {
-  background: #2d3748; // 深色面板背景
-  border-color: #4a5568; // 深色面板边框
-}
-
-.theme-options li {
-  padding: 0.5rem 1rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
-
-// 深色模式（含带图深色）下的选项文字颜色
-body.theme-dark .theme-options li,
-body.theme-dark-img .theme-options li {
-  color: #f0f0f0; // 深色面板文字用浅色
-}
-
-.theme-options li:hover {
-  background: #f7f7f7; // 浅色模式选项悬停背景
-}
-
-// 深色模式（含带图深色）下的选项悬停样式
-body.theme-dark .theme-options li:hover,
-body.theme-dark-img .theme-options li:hover {
-  background: #4a5568; // 深色面板选项悬停背景
-}
-
-// 控制元素显示/隐藏（主题选项面板默认隐藏）
-.hidden {
-  display: none !important; // 加 !important 确保优先级，避免被覆盖
-}
-
-// 2. 四种主题样式定义（浅色/深色/带图浅色/带图深色）
-// 浅色模式（无背景图）
-body.theme-light {
-  background-color: #fff;
-  color: #2d3748; // 深色文字，适配浅色背景
-}
-
-// 深色模式（无背景图）
-body.theme-dark {
-  background-color: #1a202c; // 深灰背景，不刺眼
-  color: #f0f0f0; // 浅色文字，适配深色背景
-}
-
-// 浅色模式（带背景图）
-body.theme-light-img {
-  background-color: #fff;
-  background-image: url("{{ 'https://youke1.picui.cn/s1/2025/08/18/68a2dcb6a903e.png' | relative_url }}");
-  background-repeat: repeat; // 背景图平铺
-  color: #2d3748;
-}
-
-// 深色模式（带背景图）
-body.theme-dark-img {
-  background-color: #1a202c;
-  background-image: url("{{ 'https://youke1.picui.cn/s1/2025/08/18/68a2dcb6a903e.png' | relative_url }}");
-  background-repeat: repeat;
-  color: #f0f0f0;
-}
-
-// 3. 代码块样式适配（确保不同主题下代码块可读性）
-body.theme-light .highlighter-rouge,
-body.theme-light-img .highlighter-rouge {
-  background-color: #f7f7f7; // 浅色背景下代码块用浅灰
-  color: #2d3748;
-  padding: 1rem; // 加内边距，避免代码贴边
-  border-radius: 4px; // 轻微圆角，更美观
-}
-
-body.theme-dark .highlighter-rouge,
-body.theme-dark-img .highlighter-rouge {
-  background-color: #2d3748; // 深色背景下代码块用深灰
-  color: #f0f0f0;
-  padding: 1rem;
-  border-radius: 4px;
-}
-
-// 4. 导航栏水平布局（核心：让标题与菜单在同一行）
-.masthead .wrap {
-  display: flex; // 开启弹性布局，子元素水平排列
-  justify-content: space-between; // 左右两端对齐（标题左，菜单+主题切换器右）
-  align-items: center; // 垂直居中，避免高低错位
-  flex-wrap: wrap; // 小屏幕自动换行，防止溢出
-  padding: 0.8rem 0; // 上下内边距，优化与上下元素的间距
-  max-width: 1200px; // 限制最大宽度，避免大屏幕下元素太分散
-  margin: 0 auto; // 容器水平居中（适配宽屏）
-}
-
-// 导航菜单（首页/分类等）水平排列
-.main-nav ul {
-  display: flex; // 菜单列表项水平排列
-  list-style: none; // 清除默认列表圆点
-  margin: 0; // 清除默认外边距
-  padding: 0; // 清除默认内边距
-  gap: 1.2rem; // 菜单项之间的间距（可根据需要调整）
-}
-
-// 导航链接样式优化（提升可读性和点击体验）
-.main-nav a {
-  text-decoration: none; // 清除默认下划线（若喜欢下划线可删除）
-  color: inherit; // 继承当前主题颜色
-  padding: 0.3rem 0; // 上下内边距，扩大点击区域
-  transition: color 0.2s ease; // 颜色过渡，hover 更丝滑
-}
-
-// 导航链接 hover 效果
-.main-nav a:hover {
-  color: #4a5568; // 浅色模式下 hover 深色
-}
-body.theme-dark .main-nav a:hover,
-body.theme-dark-img .main-nav a:hover {
-  color: #cbd5e0; // 深色模式下 hover 浅灰
-}
-
-// 5. 小屏幕适配（手机/平板，避免布局错乱）
+// ------------------------------
+// 5. 响应式适配（手机/平板）
+// ------------------------------
 @media (max-width: 768px) {
-  // 导航容器垂直排列
   .masthead .wrap {
-    flex-direction: column; // 子元素垂直对齐
-    text-align: center; // 文字居中
-    padding: 0.5rem 1rem; // 左右加内边距，避免贴边
+    flex-direction: column !important; // 垂直排列
+    text-align: center !important;     // 文字居中
+    padding: 0.8rem 3% !important;     // 缩小左右间距
   }
 
-  // 导航菜单垂直排列时的间距
   .main-nav ul {
-    margin-top: 0.8rem; // 与标题错开间距
-    gap: 1rem; // 缩小间距，适配小屏幕
-    flex-wrap: wrap; // 菜单项太多时自动换行
-    justify-content: center; // 菜单居中对齐
+    margin-top: 0.8rem !important;     // 菜单与标题间距
+    gap: 1rem !important;              // 缩小菜单项间距
+    justify-content: center !important; // 菜单居中
   }
 
-  // 主题切换器位置调整（垂直排列时居中）
   .theme-switcher-container {
-    margin: 0.8rem 0 0 0; // 上下间距，左右无间距
+    margin: 0.8rem 0 0 0 !important;   // 主题切换器居中
   }
+}
+
+// 隐藏所有不需要的元素（包括残留的Quick-Start Guide）
+.quick-start-guide,
+.hidden-links,
+.masthead__menu-item--external {
+  display: none !important;
 }
