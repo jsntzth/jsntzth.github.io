@@ -1,69 +1,70 @@
-document.addEventListener('DOMContentLoaded', function() {
-  // 1. 精准获取主题切换相关元素（确保与HTML完全匹配）
-  const switcherBtn = document.getElementById('themeSwitcherBtn');
-  const themeOptionsList = document.getElementById('themeOptions');
-  const themeOptionItems = themeOptionsList ? themeOptionsList.querySelectorAll('li') : [];
+// 等待页面完全加载
+window.addEventListener('load', function() {
+  // 直接通过类名获取元素（更可靠）
+  const switcherContainer = document.querySelector('.theme-switcher-container');
+  const switcherBtn = document.querySelector('.theme-switcher-btn');
+  const themeOptions = document.querySelector('.theme-options');
+  const themeItems = document.querySelectorAll('.theme-options li');
   const body = document.body;
 
-  // 检查关键元素是否存在（避免报错导致脚本失效）
-  if (!switcherBtn || !themeOptionsList || themeOptionItems.length === 0) {
-    console.error('主题切换元素缺失，请检查HTML中是否有 id="themeSwitcherBtn" 和 id="themeOptions"');
+  // 检查所有必要元素是否存在
+  if (!switcherContainer || !switcherBtn || !themeOptions || themeItems.length === 0) {
+    console.error('主题切换元素缺失，请检查HTML结构');
     return;
   }
 
-  // 2. 初始化：优先读取本地存储的主题，默认用“普通浅色”
+  // 初始化主题
   let currentTheme = localStorage.getItem('blogTheme') || 'light';
-  // 初始化时就应用主题（确保页面加载时样式正确）
   applyTheme(currentTheme);
 
-  // 3. 点击“切换主题”按钮：显示/隐藏选项面板
+  // 按钮点击事件（显示/隐藏选项）
   switcherBtn.addEventListener('click', function(e) {
-    e.stopPropagation(); // 阻止事件冒泡（避免点击按钮后立即关闭面板）
-    themeOptionsList.classList.toggle('hidden');
-    // 更新按钮文字为当前主题（提升用户体验）
-    updateSwitcherBtnText(currentTheme);
+    e.stopPropagation();
+    switcherContainer.classList.toggle('active');
   });
 
-  // 4. 点击具体主题选项（包括带图浅色）：切换主题
-  themeOptionItems.forEach(item => {
+  // 点击选项切换主题
+  themeItems.forEach(item => {
     item.addEventListener('click', function(e) {
-      e.stopPropagation(); // 阻止事件冒泡
-      // 获取选项的 data-theme 属性（如 "light-img"）
-      const selectedTheme = this.getAttribute('data-theme');
-      if (selectedTheme) {
-        currentTheme = selectedTheme;
-        applyTheme(currentTheme); // 应用选中的主题
-        localStorage.setItem('blogTheme', currentTheme); // 保存到本地存储
-        themeOptionsList.classList.add('hidden'); // 切换后关闭面板
+      e.stopPropagation();
+      const theme = this.getAttribute('data-theme');
+      if (theme) {
+        currentTheme = theme;
+        applyTheme(theme);
+        localStorage.setItem('blogTheme', theme);
+        switcherContainer.classList.remove('active');
       }
     });
   });
 
-  // 5. 点击页面其他区域：关闭主题选项面板
+  // 点击页面其他地方关闭选项
   document.addEventListener('click', function() {
-    if (!themeOptionsList.classList.contains('hidden')) {
-      themeOptionsList.classList.add('hidden');
-    }
+    switcherContainer.classList.remove('active');
   });
 
-  // 6. 核心函数1：应用主题（给body添加对应的主题类）
-  function applyTheme(themeName) {
-    // 先移除所有主题类，避免样式冲突
+  // 阻止选项面板内部点击事件冒泡
+  themeOptions.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
+  // 应用主题的核心函数
+  function applyTheme(theme) {
+    // 移除所有主题类
     body.classList.remove('theme-light', 'theme-dark', 'theme-light-img', 'theme-dark-img');
-    // 给body添加当前主题类（如 "theme-light-img"）
-    body.classList.add(`theme-${themeName}`);
-    // 更新按钮文字
-    updateSwitcherBtnText(themeName);
+    // 添加当前主题类
+    body.classList.add('theme-' + theme);
+    // 更新按钮文本
+    updateButtonText(theme);
   }
 
-  // 7. 辅助函数：更新“切换主题”按钮的文字
-  function updateSwitcherBtnText(themeName) {
-    const themeTextMap = {
-      'light': '普通浅色 ▼',
-      'dark': '普通深色 ▼',
-      'light-img': '带图浅色 ▼',
-      'dark-img': '带图深色 ▼'
+  // 更新按钮显示文本
+  function updateButtonText(theme) {
+    const texts = {
+      'light': '普通浅色',
+      'dark': '普通深色',
+      'light-img': '带图浅色',
+      'dark-img': '带图深色'
     };
-    switcherBtn.textContent = themeTextMap[themeName] || '切换主题 ▼';
+    switcherBtn.textContent = texts[theme] || '切换主题';
   }
 });
