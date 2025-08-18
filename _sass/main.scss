@@ -1,65 +1,67 @@
 ---
-# Only the main Sass file needs front matter (the dashes are enough)
 search: false
 ---
 
 @charset "utf-8";
 
-// 导入主题核心样式（确保先加载主题基础样式）
-@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}";
+// 导入主题核心样式（先加载主题默认样式）
+@import "minimal-mistakes/skins/default";  // 强制使用默认皮肤，避免深色冲突
 @import "minimal-mistakes";
 
 // ------------------------------
-// 1. 导航栏布局修复（核心解决位置错乱）
+// 1. 导航栏核心修复（确保顺序：博客标题 → 菜单 → 主题按钮）
 // ------------------------------
 .masthead {
-  // 清除默认内外边距，避免布局偏移
-  margin: 0;
-  padding: 0;
-
   .wrap {
-    display: flex !important;          // 强制水平布局
-    justify-content: space-between !important; // 标题左，菜单右
-    align-items: center !important;    // 垂直居中对齐
-    flex-wrap: wrap !important;        // 小屏幕自动换行
-    padding: 0.8rem 5% !important;     // 左右留5%间距，避免贴边
-    max-width: 1400px !important;      // 限制最大宽度，宽屏不分散
-    margin: 0 auto !important;         // 容器水平居中
+    display: flex !important;
+    flex-direction: row !important;  // 强制水平排列
+    justify-content: flex-start !important;  // 从左侧开始排列
+    align-items: center !important;
+    padding: 0.8rem 5% !important;
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    gap: 2rem !important;  // 标题与菜单之间的间距
   }
 
-  // 博客标题样式优化
+  // 博客标题（强制排在最左侧）
   .site-title {
-    margin: 0 !important;              // 清除默认外边距
+    order: 1 !important;  // 排序第1
+    margin: 0 !important;
     padding: 0 !important;
-    font-size: 1.5rem !important;      // 适当调整标题大小
+    font-size: 1.5rem !important;
+    white-space: nowrap !important;  // 标题不换行
   }
 
-  // 主导航菜单
+  // 主导航菜单（排在标题右侧）
   .main-nav {
+    order: 2 !important;  // 排序第2
+    flex-grow: 1 !important;  // 占据中间空间
+
     ul {
-      display: flex !important;        // 菜单水平排列
-      list-style: none !important;     // 清除列表圆点
-      margin: 0 !important;            // 清除默认外边距
-      padding: 0 !important;           // 清除默认内边距
-      gap: 1.5rem !important;          // 菜单项间距
+      display: flex !important;
+      list-style: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      gap: 1.5rem !important;
     }
 
     a {
-      text-decoration: none !important; // 清除下划线
-      color: inherit !important;        // 继承主题文字色
-      padding: 0.3rem 0 !important;
+      text-decoration: none !important;
+      color: inherit !important;
       font-size: 0.95rem !important;
-      transition: color 0.2s ease !important;
-
-      &:hover {
-        color: #4299e1 !important;      // 统一hover颜色（蓝色）
-      }
     }
   }
 
-  // 移除重复标题和Quick-Start Guide的残留样式
-  .hidden-links {
-    display: none !important;          // 彻底隐藏不需要的链接
+  // 主题切换器（排在最右侧）
+  .theme-switcher-container {
+    order: 3 !important;  // 排序第3
+    margin: 0 !important;  // 清除默认边距
+    white-space: nowrap !important;
+  }
+
+  // 彻底隐藏不需要的元素
+  .hidden-links, .masthead__menu-item--external {
+    display: none !important;
   }
 }
 
@@ -68,22 +70,16 @@ search: false
 // ------------------------------
 .theme-switcher-container {
   position: relative;
-  display: inline-block;
-  margin-left: 1rem;
 
   .theme-switcher-btn {
     background: transparent;
-    border: none;
+    border: 1px solid currentColor;  // 显示边框，确保可见
     color: inherit;
     font-size: 0.9rem;
     cursor: pointer;
-    padding: 0.5rem 0.8rem;
+    padding: 0.3rem 0.8rem;
     border-radius: 4px;
-    transition: background 0.3s ease;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.1);
-    }
+    transition: all 0.3s ease;
   }
 
   .theme-options {
@@ -95,169 +91,115 @@ search: false
     border-radius: 4px;
     list-style: none;
     margin: 0;
-    padding: 0.5rem 0;
+    padding: 0;
     min-width: 120px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     z-index: 999;
+    display: none;  // 默认隐藏
 
     li {
       padding: 0.5rem 1rem;
       cursor: pointer;
-      transition: background 0.2s ease;
+      margin: 0;
 
       &:hover {
-        background: #f7f7f7;
+        background: #f0f0f0;
       }
     }
+  }
+
+  // 选项面板显示状态
+  &.active .theme-options {
+    display: block !important;
   }
 }
 
 // ------------------------------
-// 3. 主题样式定义（四种主题）
+// 3. 主题颜色样式（覆盖默认皮肤）
 // ------------------------------
+// 基础样式重置（清除默认深色影响）
 body {
-  // 普通浅色
-  &.theme-light {
-    background-color: #fff !important;
-    color: #2d3748 !important;
+  background-color: #fff !important;
+  color: #333 !important;
+  transition: all 0.3s ease !important;
+}
 
-    .theme-switcher-btn:hover {
-      background: rgba(0, 0, 0, 0.1) !important;
-    }
+// 浅色主题（默认）
+body.theme-light {
+  background-color: #fff !important;
+  color: #333 !important;
+}
 
-    .theme-options {
-      background: #fff !important;
-      border-color: #eee !important;
+// 深色主题
+body.theme-dark {
+  background-color: #121212 !important;
+  color: #e0e0e0 !important;
 
-      li {
-        color: #2d3748 !important;
+  // 深色模式下的链接和边框
+  a {
+    color: #bb86fc !important;
+  }
+  .theme-options {
+    background: #1e1e1e !important;
+    border-color: #333 !important;
 
-        &:hover {
-          background: #f7f7f7 !important;
-        }
+    li {
+      color: #e0e0e0 !important;
+      &:hover {
+        background: #333 !important;
       }
     }
   }
+}
 
-  // 普通深色
-  &.theme-dark {
-    background-color: #1a202c !important;
-    color: #f0f0f0 !important;
+// 带图浅色
+body.theme-light-img {
+  background-color: #fff !important;
+  background-image: url("{{ 'https://youke1.picui.cn/s1/2025/08/18/68a2dcb6a903e.png' | relative_url }}") !important;
+  background-repeat: repeat !important;
+  color: #333 !important;
+}
 
-    .theme-switcher-btn:hover {
-      background: rgba(255, 255, 255, 0.1) !important;
-    }
+// 带图深色
+body.theme-dark-img {
+  background-color: #121212 !important;
+  background-image: url("{{ 'https://youke1.picui.cn/s1/2025/08/18/68a2dcb6a903e.png' | relative_url }}") !important;
+  background-repeat: repeat !important;
+  color: #e0e0e0 !important;
 
-    .theme-options {
-      background: #2d3748 !important;
-      border-color: #4a5568 !important;
-
-      li {
-        color: #f0f0f0 !important;
-
-        &:hover {
-          background: #4a5568 !important;
-        }
-      }
-    }
+  a {
+    color: #bb86fc !important;
   }
+  .theme-options {
+    background: #1e1e1e !important;
+    border-color: #333 !important;
 
-  // 带图浅色
-  &.theme-light-img {
-    background-color: #fff !important;
-    background-image: url("{{ 'https://youke1.picui.cn/s1/2025/08/18/68a2dcb6a903e.png' | relative_url }}") !important;
-    background-repeat: repeat !important;
-    color: #2d3748 !important;
-
-    .theme-switcher-btn:hover {
-      background: rgba(0, 0, 0, 0.1) !important;
-    }
-
-    .theme-options {
-      background: #fff !important;
-      border-color: #eee !important;
-
-      li {
-        color: #2d3748 !important;
-
-        &:hover {
-          background: #f7f7f7 !important;
-        }
-      }
-    }
-  }
-
-  // 带图深色
-  &.theme-dark-img {
-    background-color: #1a202c !important;
-    background-image: url("{{ 'https://youke1.picui.cn/s1/2025/08/18/68a2dcb6a903e.png' | relative_url }}") !important;
-    background-repeat: repeat !important;
-    color: #f0f0f0 !important;
-
-    .theme-switcher-btn:hover {
-      background: rgba(255, 255, 255, 0.1) !important;
-    }
-
-    .theme-options {
-      background: #2d3748 !important;
-      border-color: #4a5568 !important;
-
-      li {
-        color: #f0f0f0 !important;
-
-        &:hover {
-          background: #4a5568 !important;
-        }
+    li {
+      color: #e0e0e0 !important;
+      &:hover {
+        background: #333 !important;
       }
     }
   }
 }
 
 // ------------------------------
-// 4. 代码块样式适配
-// ------------------------------
-.highlighter-rouge {
-  padding: 1rem !important;
-  border-radius: 4px !important;
-  overflow-x: auto !important; // 长代码横向滚动
-
-  body.theme-light &,
-  body.theme-light-img & {
-    background-color: #f7f7f7 !important;
-    color: #2d3748 !important;
-  }
-
-  body.theme-dark &,
-  body.theme-dark-img & {
-    background-color: #2d3748 !important;
-    color: #f0f0f0 !important;
-  }
-}
-
-// ------------------------------
-// 5. 响应式适配（手机/平板）
+// 4. 响应式适配（手机端）
 // ------------------------------
 @media (max-width: 768px) {
   .masthead .wrap {
-    flex-direction: column !important; // 垂直排列
-    text-align: center !important;     // 文字居中
-    padding: 0.8rem 3% !important;     // 缩小左右间距
+    flex-direction: column !important;  // 垂直排列
+    gap: 0.8rem !important;
+    text-align: center !important;
+  }
+
+  .site-title, .main-nav, .theme-switcher-container {
+    order: initial !important;  // 恢复默认顺序
+    width: 100% !important;
   }
 
   .main-nav ul {
-    margin-top: 0.8rem !important;     // 菜单与标题间距
-    gap: 1rem !important;              // 缩小菜单项间距
-    justify-content: center !important; // 菜单居中
+    justify-content: center !important;
+    flex-wrap: wrap !important;
   }
-
-  .theme-switcher-container {
-    margin: 0.8rem 0 0 0 !important;   // 主题切换器居中
-  }
-}
-
-// 隐藏所有不需要的元素（包括残留的Quick-Start Guide）
-.quick-start-guide,
-.hidden-links,
-.masthead__menu-item--external {
-  display: none !important;
 }
