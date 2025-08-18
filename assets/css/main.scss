@@ -5,5 +5,91 @@ search: false
 
 @charset "utf-8";
 
-@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // skin
-@import "minimal-mistakes"; // main partials
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}";
+@import "minimal-mistakes";
+.theme-switcher-container {
+  position: relative;
+  display: inline-block;
+  margin-left: 1rem;
+}
+.theme-switcher-btn {
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0.5rem 0.8rem;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+.theme-switcher-btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  @include dark-mode {
+    background: rgba(255, 255, 255, 0.1);
+  }
+}
+.theme-options {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  list-style: none;
+  margin: 0;
+  padding: 0.5rem 0;
+  min-width: 120px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  z-index: 999;
+  @include dark-mode {
+    background: #2d3748;
+    border-color: #4a5568;
+  }
+}
+.theme-options li {
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+  @include dark-mode {
+    color: #f0f0f0;
+  }
+}
+.theme-options li:hover {
+  background: #f7f7f7;
+  @include dark-mode {
+    background: #4a5568;
+  }
+}
+.hidden { display: none; }
+
+body.theme-light {
+  background-color: #fff;
+  color: #2d3748;
+}
+body.theme-dark {
+  background-color: #1a202c;
+  color: #f0f0f0;
+}
+body.theme-light-img {
+  background-color: #fff;
+  background-image: url("{{ 'https://youke1.picui.cn/s1/2025/08/18/68a2dcb6a903e.png' | relative_url }}");
+  background-repeat: repeat;
+  color: #2d3748;
+}
+body.theme-dark-img {
+  background-color: #1a202c;
+  background-image: url("{{ 'https://youke1.picui.cn/s1/2025/08/18/68a2dcb6a903e.png' | relative_url }}");
+  background-repeat: repeat;
+  color: #f0f0f0;
+}
+
+body.theme-light .highlighter-rouge,
+body.theme-light-img .highlighter-rouge {
+  background-color: #f7f7f7;
+  color: #2d3748;
+}
+body.theme-dark .highlighter-rouge,
+body.theme-dark-img .highlighter-rouge {
+  background-color: #2d3748;
+  color: #f0f0f0;
+}
