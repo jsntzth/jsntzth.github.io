@@ -1,28 +1,62 @@
-<meta charset="utf-8">
+<!DOCTYPE html>
+<html lang="{{ site.locale | slice: 0,2 | default: 'en' }}" class="no-js">
+  <head>
+    {% include head.html %}
+  </head>
 
-{% include seo.html %}
+  <body class="layout--{{ page.layout | default: layout.layout }}{% if page.classes or layout.classes %}{{ page.classes | default: layout.classes | join: ' ' | prepend: ' ' }}{% endif %}">
+    {% include_cached skip-links.html %}
+    {% include_cached browser-upgrade.html %}
+    {% include_cached masthead.html %}
 
-{% unless site.atom_feed.hide %}
-  <link href="{% if site.atom_feed.path %}{{ site.atom_feed.path }}{% else %}{{ '/feed.xml' | relative_url }}{% endif %}" type="application/atom+xml" rel="alternate" title="{{ site.title }} Feed">
-{% endunless %}
+    <div class="initial-content">
+      <header class="page__header" role="banner">
+        <div class="wrapper">
+          <h1 class="page__title" itemprop="headline">
+            <a href="https://jsntzth.github.io/" rel="home">{{ site.title | escape }}</a>
+          </h1>
+          
+          <nav class="main-nav" role="navigation" aria-label="Main navigation">
+            <ul class="nav">
+              <li><a href="https://jsntzth.github.io/" target="_self">首页</a></li>
+              
+              <li><a href="{{ '/categories/' | relative_url }}">分类</a></li>
+              
+              <li><a href="{{ '/tags/' | relative_url }}">标签</a></li>
+              
+              <li><a href="{{ '/friends/' | relative_url }}">友链</a></li>
+              
+              <li><a href="{{ '/about/' | relative_url }}">关于</a></li>
+              
+              <li class="theme-switcher-container">
+                <button id="themeSwitcherBtn" class="theme-switcher-btn">切换主题 ▼</button>
+                <ul id="themeOptions" class="theme-options hidden">
+                  <li data-theme="light">浅色模式</li>
+                  <li data-theme="dark">深色模式</li>
+                  <li data-theme="light-img">带图浅色</li>
+                  <li data-theme="dark-img">带图深色</li>
+                </ul>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </header>
 
-{%- comment %} https://docs.google.com/presentation/d/1rmxwWa9P6_xHqonmh5ONXRS-jPc5XKbnv99Rjkhe04s/present {% endcomment -%}
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+      {{ content }}
+    </div>
 
-<script>
-  document.documentElement.className = document.documentElement.className.replace(/\bno-js\b/g, '') + ' js ';
-  {% if site.enable_copy_code_button -%}
-    window.enable_copy_code_button = true;
-  {%- endif %}
-</script>
+    {% if site.search == true %}
+      {% include_cached search/search_form.html %}
+    {% endif %}
 
-<!-- For all browsers -->
-<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
-<link rel="preload" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
-<noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@latest/css/all.min.css"></noscript>
+    <div class="page__footer">
+      <footer>
+        {% include footer/custom.html %}
+        {% include_cached footer.html %}
+      </footer>
+    </div>
 
-{% if site.head_scripts %}
-  {% for script in site.head_scripts %}
-    <script src="{{ script | relative_url }}"></script>
-  {% endfor %}
-{% endif %}
+    {% include scripts.html %}
+  </body>
+</html>
+    
