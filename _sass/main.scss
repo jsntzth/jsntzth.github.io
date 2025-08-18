@@ -1,297 +1,199 @@
 ---
-# Only the main Sass file needs front matter (the dashes are enough)
 search: false
 ---
 
 @charset "utf-8";
 
-// 1. 导入主题核心样式（确保先加载默认皮肤，避免样式覆盖）
-@import "minimal-mistakes/skins/default"; // 强制默认皮肤，不干扰自定义主题
+// 导入主题核心样式
+@import "minimal-mistakes/skins/default";
 @import "minimal-mistakes";
 
-// 2. 导航栏布局（确保标题+菜单+主题按钮顺序正确，水平排列）
+// 1. 导航栏核心修复（解决换行问题）
 .masthead {
-  margin: 0;
-  padding: 0;
-
   .wrap {
     display: flex !important;
-    justify-content: flex-start !important; // 从左到右排列（标题→菜单→主题按钮）
-    align-items: center !important; // 垂直居中，避免高低错位
-    flex-wrap: wrap !important; // 小屏幕自动换行
-    padding: 0.8rem 5% !important; // 左右留间距，不贴边
-    max-width: 1400px !important; // 限制宽屏最大宽度
-    margin: 0 auto !important; // 容器水平居中
-    gap: 2rem !important; // 标题与菜单、菜单与主题按钮的间距
+    flex-direction: row !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 0.8rem 5% !important;
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    gap: 1rem !important;
+    white-space: nowrap !important; /* 关键：防止容器内元素换行 */
   }
 
-  // 博客标题（固定在最左侧）
+  // 博客标题
   .site-title {
-    order: 1 !important;
     margin: 0 !important;
     padding: 0 !important;
-    font-size: 1.5rem !important;
-    white-space: nowrap !important; // 标题不换行
+    font-size: 1.4rem !important;
+    flex-shrink: 0 !important; /* 不缩小 */
   }
 
-  // 主导航菜单（标题右侧）
+  // 主导航菜单（解决换行）
   .main-nav {
-    order: 2 !important;
-    flex-grow: 1 !important; // 占据中间空间，让主题按钮靠右
+    flex-grow: 0 !important; /* 不自动扩展 */
+    margin: 0 1rem !important;
 
     ul {
       display: flex !important;
       list-style: none !important;
       margin: 0 !important;
       padding: 0 !important;
-      gap: 1.5rem !important; // 菜单项间距
+      gap: 1rem !important; /* 减小间距防止换行 */
+      flex-wrap: nowrap !important; /* 关键：菜单项不换行 */
     }
 
     a {
       text-decoration: none !important;
       color: inherit !important;
-      font-size: 0.95rem !important;
-      transition: color 0.2s ease !important;
-
-      &:hover {
-        color: #4299e1 !important; // 统一hover蓝色，提升辨识度
-      }
+      font-size: 0.9rem !important; /* 缩小字体防止换行 */
+      padding: 0.2rem 0 !important;
     }
   }
 
-  // 主题切换器（固定在最右侧）
+  // 主题切换器
   .theme-switcher-container {
-    order: 3 !important;
-    margin: 0 !important;
-    white-space: nowrap !important; // 按钮不换行
+    flex-shrink: 0 !important; /* 不缩小 */
   }
 
-  // 彻底隐藏不需要的元素（如残留的Quick-Start Guide）
+  // 隐藏不需要的元素
   .hidden-links, .masthead__menu-item--external {
     display: none !important;
   }
 }
 
-// 3. 主题切换器样式（确保按钮和选项面板可点击、不遮挡）
+// 2. 主题切换器样式（确保可点击）
 .theme-switcher-container {
-  position: relative; // 让选项面板相对于按钮定位
+  position: relative;
 
-  // 切换按钮样式（确保可见、可点击）
   .theme-switcher-btn {
     background: transparent;
-    border: 1px solid currentColor !important; // 显示边框，避免浅色模式下看不见
+    border: 1px solid currentColor !important;
     color: inherit !important;
-    font-size: 0.9rem !important;
-    cursor: pointer !important; // 显示指针，提示可点击
-    padding: 0.3rem 0.8rem !important;
-    border-radius: 4px !important;
+    font-size: 0.85rem !important;
+    cursor: pointer !important;
+    padding: 0.2rem 0.6rem !important;
+    border-radius: 3px !important;
     transition: all 0.3s ease !important;
-    outline: none !important; // 去除点击时的默认轮廓
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.1) !important;
-    }
+    display: inline-block !important; /* 确保按钮可点击 */
   }
 
-  // 主题选项面板（确保显示时不被遮挡，可点击）
   .theme-options {
     position: absolute !important;
-    top: 100% !important; // 面板在按钮正下方
-    right: 0 !important; // 面板右对齐按钮
+    top: 100% !important;
+    right: 0 !important;
     background: #fff !important;
-    border: 1px solid #eee !important;
-    border-radius: 4px !important;
+    border: 1px solid #ddd !important;
+    border-radius: 3px !important;
     list-style: none !important;
-    margin: 0.2rem 0 0 0 !important; // 与按钮间距，避免重叠
+    margin: 0.1rem 0 0 0 !important;
     padding: 0 !important;
-    min-width: 120px !important; // 固定宽度，选项不换行
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important; // 阴影提升层次感
-    z-index: 9999 !important; // 最高层级，不被其他元素遮挡
-    display: none !important; // 默认隐藏
+    min-width: 110px !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1) !important;
+    z-index: 9999 !important;
+    display: none !important;
 
-    // 选项列表项（确保可点击，样式清晰）
     li {
-      padding: 0.5rem 1rem !important;
+      padding: 0.4rem 0.8rem !important;
       cursor: pointer !important;
       margin: 0 !important;
-      transition: background 0.2s ease !important;
 
       &:hover {
-        background: #f7f7f7 !important; //  hover时背景变化，提示可点击
+        background: #f5f5f5 !important;
       }
     }
   }
 
-  // 选项面板显示状态（通过添加active类控制显示）
   &.active .theme-options {
-    display: block !important; // 确保active时面板显示
+    display: block !important;
   }
 }
 
-// 4. 核心：四种主题样式（重点修复带图主题背景图）
+// 3. 主题样式（修复背景图）
 body {
-  // 基础重置：确保初始状态为浅色，无样式冲突
   background-color: #fff !important;
   color: #333 !important;
-  transition: all 0.3s ease !important; // 主题切换时的过渡动画
+  transition: all 0.3s ease !important;
 
-  // 普通浅色主题
+  // 普通浅色
   &.theme-light {
     background-color: #fff !important;
     color: #333 !important;
-
-    .theme-switcher-btn:hover {
-      background: rgba(0, 0, 0, 0.1) !important;
-    }
-
-    .theme-options {
-      background: #fff !important;
-      border-color: #eee !important;
-
-      li {
-        color: #333 !important;
-        &:hover {
-          background: #f7f7f7 !important;
-        }
-      }
-    }
   }
 
-  // 普通深色主题
+  // 普通深色
   &.theme-dark {
-    background-color: #121212 !important;
+    background-color: #1a1a1a !important;
     color: #e0e0e0 !important;
 
-    .theme-switcher-btn:hover {
-      background: rgba(255, 255, 255, 0.1) !important;
-    }
-
     .theme-options {
-      background: #1e1e1e !important;
-      border-color: #333 !important;
-
-      li {
-        color: #e0e0e0 !important;
-        &:hover {
-          background: #333 !important;
-        }
-      }
+      background: #2d2d2d !important;
+      border-color: #444 !important;
     }
   }
 
-  // 带图浅色主题（重点：确保背景图显示）
+  // 带图浅色（重点修复背景图）
   &.theme-light-img {
     background-color: #fff !important;
-    // 背景图：用!important强制生效，路径确保可访问
+    // 直接使用图片URL，不通过Jekyll变量，确保路径正确
     background-image: url("https://youke1.picui.cn/s1/2025/08/18/68a2dcb6a903e.png") !important;
-    background-repeat: repeat !important; // 图片平铺，覆盖整个页面
-    background-attachment: scroll !important; // 滚动时背景跟随
-    background-size: auto !important; // 保持图片原尺寸
+    background-repeat: repeat !important;
+    background-attachment: scroll !important;
+    background-size: auto !important;
     color: #333 !important;
-
-    .theme-switcher-btn:hover {
-      background: rgba(0, 0, 0, 0.1) !important;
-    }
-
-    .theme-options {
-      background: #fff !important;
-      border-color: #eee !important;
-
-      li {
-        color: #333 !important;
-        &:hover {
-          background: #f7f7f7 !important;
-        }
-      }
-    }
-
-    // 内容区透明，确保背景图可见（避免主题默认白色遮挡）
-    .masthead, .page__content, .footer {
-      background-color: transparent !important;
-    }
   }
 
-  // 带图深色主题（同理，确保背景图显示）
+  // 带图深色
   &.theme-dark-img {
-    background-color: #121212 !important;
+    background-color: #1a1a1a !important;
     background-image: url("https://youke1.picui.cn/s1/2025/08/18/68a2dcb6a903e.png") !important;
     background-repeat: repeat !important;
     background-attachment: scroll !important;
     background-size: auto !important;
     color: #e0e0e0 !important;
 
-    .theme-switcher-btn:hover {
-      background: rgba(255, 255, 255, 0.1) !important;
-    }
-
     .theme-options {
-      background: #1e1e1e !important;
-      border-color: #333 !important;
-
-      li {
-        color: #e0e0e0 !important;
-        &:hover {
-          background: #333 !important;
-        }
-      }
-    }
-
-    // 内容区透明，显示背景图
-    .masthead, .page__content, .footer {
-      background-color: transparent !important;
+      background: #2d2d2d !important;
+      border-color: #444 !important;
     }
   }
 }
 
-// 5. 代码块样式适配（确保不同主题下可读性）
-.highlighter-rouge {
-  padding: 1rem !important;
-  border-radius: 4px !important;
-  overflow-x: auto !important; // 长代码横向滚动，不换行
+// 4. 内容区域透明（确保背景图可见）
+.page, .page__inner-wrap, .site, .main-content {
+  background-color: transparent !important;
+  background-image: none !important;
+}
 
-  // 浅色/带图浅色主题下的代码块
+// 5. 代码块适配
+.highlighter-rouge {
+  padding: 0.8rem !important;
+  border-radius: 3px !important;
+
   body.theme-light &,
   body.theme-light-img & {
-    background-color: #f7f7f7 !important;
-    color: #333 !important;
+    background-color: #f5f5f5 !important;
   }
 
-  // 深色/带图深色主题下的代码块
   body.theme-dark &,
   body.theme-dark-img & {
     background-color: #2d2d2d !important;
-    color: #e0e0e0 !important;
   }
 }
 
-// 6. 响应式适配（手机端布局正常）
+// 6. 响应式调整（小屏幕适配）
 @media (max-width: 768px) {
   .masthead .wrap {
-    flex-direction: column !important; // 垂直排列
-    gap: 0.8rem !important; // 缩小间距
-    text-align: center !important; // 文字居中
-  }
-
-  .site-title, .main-nav, .theme-switcher-container {
-    order: initial !important; // 恢复默认顺序
-    width: 100% !important; // 占满屏幕宽度
+    flex-direction: column !important;
+    white-space: normal !important;
+    gap: 0.5rem !important;
+    padding: 0.5rem 3% !important;
   }
 
   .main-nav ul {
-    justify-content: center !important; // 菜单居中
-    flex-wrap: wrap !important; // 菜单项太多时自动换行
-  }
-
-  // 手机端主题选项面板居中
-  .theme-switcher-container {
-    display: flex !important;
+    gap: 0.8rem !important;
     justify-content: center !important;
+    flex-wrap: wrap !important; /* 小屏幕允许换行 */
   }
-}
-
-// 7. 紧急修复：若背景图仍不显示，强制覆盖主题默认背景
-// （针对主题可能存在的背景色遮挡问题）
-.page, .page__inner-wrap, .site {
-  background-color: transparent !important;
-  background-image: none !important; // 清除主题默认背景图，避免覆盖自定义图
 }
