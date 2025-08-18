@@ -10,6 +10,9 @@
   {% endunless %}
 {% endif %}
 
+<!-- 新增：引用 CSS 文件 -->
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+
 <header class="masthead">
   <div class="wrap">
     {% if site.logo %}
@@ -51,4 +54,3 @@
     </nav>
   </div>
 </header>
-    
