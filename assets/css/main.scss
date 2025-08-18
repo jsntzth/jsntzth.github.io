@@ -5,13 +5,17 @@ search: false
 
 @charset "utf-8";
 
-@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}";
-@import "minimal-mistakes";
+// 导入主题核心样式
+@import "minimal-mistakes/skins/{{ site.minimal_mistakes_skin | default: 'default' }}"; // 皮肤样式
+@import "minimal-mistakes"; // 主题主样式
+
+// 自定义主题切换器样式（替换之前的错误代码）
 .theme-switcher-container {
   position: relative;
   display: inline-block;
   margin-left: 1rem;
 }
+
 .theme-switcher-btn {
   background: transparent;
   border: none;
@@ -22,12 +26,17 @@ search: false
   border-radius: 4px;
   transition: background 0.3s;
 }
+
 .theme-switcher-btn:hover {
   background: rgba(0, 0, 0, 0.1);
-  @include dark-mode {
-    background: rgba(255, 255, 255, 0.1);
-  }
 }
+
+// 深色模式下的按钮悬停样式
+body.theme-dark .theme-switcher-btn:hover,
+body.theme-dark-img .theme-switcher-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .theme-options {
   position: absolute;
   top: 100%;
@@ -41,41 +50,59 @@ search: false
   min-width: 120px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   z-index: 999;
-  @include dark-mode {
-    background: #2d3748;
-    border-color: #4a5568;
-  }
 }
+
+// 深色模式下的主题选项面板样式
+body.theme-dark .theme-options,
+body.theme-dark-img .theme-options {
+  background: #2d3748;
+  border-color: #4a5568;
+}
+
 .theme-options li {
   padding: 0.5rem 1rem;
   cursor: pointer;
   transition: background 0.2s;
-  @include dark-mode {
-    color: #f0f0f0;
-  }
 }
+
+// 深色模式下的选项文字颜色
+body.theme-dark .theme-options li,
+body.theme-dark-img .theme-options li {
+  color: #f0f0f0;
+}
+
 .theme-options li:hover {
   background: #f7f7f7;
-  @include dark-mode {
-    background: #4a5568;
-  }
 }
-.hidden { display: none; }
 
+// 深色模式下的选项悬停样式
+body.theme-dark .theme-options li:hover,
+body.theme-dark-img .theme-options li:hover {
+  background: #4a5568;
+}
+
+.hidden {
+  display: none;
+}
+
+// 主题样式定义
 body.theme-light {
   background-color: #fff;
   color: #2d3748;
 }
+
 body.theme-dark {
   background-color: #1a202c;
   color: #f0f0f0;
 }
+
 body.theme-light-img {
   background-color: #fff;
   background-image: url("{{ 'https://youke1.picui.cn/s1/2025/08/18/68a2dcb6a903e.png' | relative_url }}");
   background-repeat: repeat;
   color: #2d3748;
 }
+
 body.theme-dark-img {
   background-color: #1a202c;
   background-image: url("{{ 'https://youke1.picui.cn/s1/2025/08/18/68a2dcb6a903e.png' | relative_url }}");
@@ -83,11 +110,13 @@ body.theme-dark-img {
   color: #f0f0f0;
 }
 
+// 代码块样式适配
 body.theme-light .highlighter-rouge,
 body.theme-light-img .highlighter-rouge {
   background-color: #f7f7f7;
   color: #2d3748;
 }
+
 body.theme-dark .highlighter-rouge,
 body.theme-dark-img .highlighter-rouge {
   background-color: #2d3748;
