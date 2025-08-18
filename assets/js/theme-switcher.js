@@ -3,6 +3,12 @@ document.addEventListener('DOMContentLoaded', function() {
   const themeOptions = document.getElementById('themeOptions');
   const body = document.body;
   const mathJaxDisplays = document.querySelectorAll('.MathJax_Display');
+  
+  if (!themeSwitcherBtn || !themeOptions) {
+    console.warn('主题切换按钮或选项列表不存在，跳过主题切换逻辑');
+    return;
+  }
+
   const savedTheme = localStorage.getItem('blogTheme') || 'light';
   applyTheme(savedTheme);
 
@@ -15,12 +21,18 @@ document.addEventListener('DOMContentLoaded', function() {
     themeOptions.classList.add('hidden');
   });
 
+  themeOptions.addEventListener('click', function(e) {
+    e.stopPropagation();
+  });
+
   themeOptions.querySelectorAll('li').forEach(option => {
     option.addEventListener('click', function() {
       const selectedTheme = this.getAttribute('data-theme');
-      applyTheme(selectedTheme);
-      localStorage.setItem('blogTheme', selectedTheme); 
-      themeOptions.classList.add('hidden'); 
+      if (selectedTheme) { 
+        applyTheme(selectedTheme);
+        localStorage.setItem('blogTheme', selectedTheme);
+        themeOptions.classList.add('hidden');
+      }
     });
   });
 
@@ -39,9 +51,11 @@ document.addEventListener('DOMContentLoaded', function() {
       'light-img': '带图浅色',
       'dark-img': '带图深色'
     };
-    themeSwitcherBtn.textContent = `${themeNameMap[theme]} ▼`;
-  }
 
+    if (themeSwitcherBtn && themeNameMap[theme]) {
+      themeSwitcherBtn.textContent = `${themeNameMap[theme]} ▼`;
+    }
+  }
   if (window.MathJax) {
     MathJax.Hub.Queue(function() {
       applyTheme(savedTheme);
