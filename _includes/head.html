@@ -1,16 +1,14 @@
-<!-- _includes/header.html 完整代码 -->
+<!-- _includes/header.html 修正版（删除了错误的 CSS 引用） -->
 <header class="masthead" role="banner">
   <div class="wrap">
-    <!-- 标题与副标题容器（确保副标题在标题下方） -->
+    <!-- 标题与副标题容器 -->
     <div class="site-header">
       <a class="site-title" href="{{ '/' | relative_url }}">jsntzth 的博客</a>
-      <!-- 副标题（一个不错的博客），在标题下方 -->
       <p class="site-subtitle">{{ site.description | default: "一个不错的博客。" }}</p>
     </div>
 
-    <!-- 导航菜单 + 主题切换器 容器（横向排列） -->
+    <!-- 导航菜单 + 主题切换器 容器 -->
     <div class="nav-and-theme">
-      <!-- 导航菜单（首页/分类等） -->
       <nav class="main-nav" role="navigation">
         <ul>
           <li><a href="{{ '/' | relative_url }}">首页</a></li>
@@ -35,5 +33,5 @@
   </div>
 </header>
 
-<!-- 引入主题切换脚本（确保在HTML末尾，避免加载顺序问题） -->
+<!-- 主题切换脚本（放在 header 末尾没问题） -->
 <script src="{{ '/assets/js/theme-switcher.js' | relative_url }}"></script>
