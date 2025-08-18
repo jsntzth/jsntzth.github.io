@@ -168,7 +168,6 @@ footer:
 include:
   - .htaccess
   - _pages
-  - "*.mp3"
 exclude:
   - "*.sublime-project"
   - "*.sublime-workspace"
