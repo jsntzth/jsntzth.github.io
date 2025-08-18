@@ -1,6 +1,12 @@
 <!-- start custom head snippets -->
 
-<!-- MathJax 配置 -->
+<script>
+  (function() {
+    const savedTheme = localStorage.getItem('blogTheme') || 'light';
+    document.documentElement.classList.add(`theme-${savedTheme}`);
+  })();
+</script>
+
 <script type="text/x-mathjax-config">
   MathJax.Hub.Config({
     tex2jax: {
@@ -9,7 +15,6 @@
       processEscapes: true,
       processEnvironments: true
     },
-    // 适配深色主题
     "HTML-CSS": {
       availableFonts: ["STIX", "TeX"],
       linebreaks: { automatic: true },
@@ -22,5 +27,7 @@
 <script type="text/javascript" async
   src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
+<script src="{{ '/assets/js/theme-switcher.js' | relative_url }}"></script>
 
 <!-- end custom head snippets -->
+    
