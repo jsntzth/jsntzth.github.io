@@ -3,52 +3,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
 
-    <!-- 优先引入Font Awesome 4.7.0 -->
+    <!-- 强制优先加载Font Awesome 4.7.0 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     
     <!-- 主样式表 -->
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 
-    <!-- 增强图标显示修复（覆盖所有可能冲突） -->
+    <!-- 侧边介绍和分享图标专用修复 -->
     <style>
-        /* 全局图标修复 */
-        [class^="fa-"], [class*=" fa-"] {
+        /* 基础图标样式重置 */
+        .fa {
             display: inline-block !important;
-            font-family: "FontAwesome" !important;
-            font-style: normal !important;
-            font-weight: normal !important;
+            font: normal normal normal 14px/1 FontAwesome !important;
             font-size: inherit !important;
             text-rendering: auto !important;
             -webkit-font-smoothing: antialiased !important;
+            -moz-osx-font-smoothing: grayscale !important;
         }
         
-        /* 个人信息区域图标（江苏-南通下方） */
-        .profile-icons .fa-github,
-        .profile-icons .fa-envelope,
-        .profile-icons .fa-map-marker,
-        .profile-icons .fa-code {
-            font-size: 18px !important;
+        /* 文章侧边介绍区域图标（重点修复） */
+        .author-info .fa,
+        .profile-sidebar .fa-github,
+        .profile-sidebar .fa-envelope,
+        .profile-sidebar .fa-map-marker {
+            display: inline-block !important;
+            font-family: "FontAwesome" !important;
             margin-right: 8px !important;
-            color: inherit !important;
+            font-size: 16px !important;
+            color: #333 !important; /* 确保图标可见 */
         }
         
-        /* 分享区域图标 */
-        .share-buttons .fa,
-        .post-sharing .fa {
-            font-family: "FontAwesome" !important;
+        /* 文章底部分享区域图标（重点修复） */
+        .post-share .fa,
+        .share-icons .fa,
+        .social-share .fa {
             display: inline-block !important;
-            margin: 0 4px !important;
-        }
-        
-        /* 导航栏图标 */
-        #site-nav .fa {
-            margin-right: 6px !important;
-        }
-        
-        /* 搜索图标 */
-        .search__toggle .fa-search {
             font-family: "FontAwesome" !important;
-            display: inline-block !important;
+            width: auto !important;
+            height: auto !important;
+            margin: 0 5px !important;
+            font-size: 18px !important;
+        }
+        
+        /* 防止其他样式覆盖 */
+        [class*="fa-"]:before {
+            content: attr(data-icon) !important;
+            font-family: "FontAwesome" !important;
         }
     </style>
 
@@ -62,15 +62,7 @@
             tex2jax: {
                 inlineMath: [ ['$', '$'], ["\\(", "\\)"] ],
                 displayMath: [ ['$$', '$$'], ["\\[", "\\]"] ],
-                processEscapes: true,
-                processEnvironments: true
-            },
-            "HTML-CSS": {
-                availableFonts: ["STIX", "TeX"],
-                linebreaks: { automatic: true },
-                styles: {
-                    ".MathJax_Display": { "color": "#f0f0f0" }
-                }
+                processEscapes: true
             }
         });
     </script>
