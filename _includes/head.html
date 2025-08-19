@@ -1,20 +1,22 @@
 <header class="masthead" role="banner">
   <div class="wrap">
     <div class="masthead__menu">
-      <nav id="site-nav" class="greedy-nav">
-        <!-- Logo和标题区域（保留系统原有结构） -->
-        <a class="site-logo" href="{{ '/' | relative_url }}">
-          <img src="https://cdn.luogu.com.cn/upload/image_hosting/uhiclg5g.png" 
-               alt="jsntzth 的博客" 
-               style="width: 40px; height: 40px; margin-right: 8px;">
-        </a>
+      <nav id="site-nav" class="greedy-nav" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+        <!-- 左侧：Logo和标题（调整位置，不那么靠左） -->
+        <div style="display: flex; align-items: center; margin-left: 20px;">
+          <a class="site-logo" href="{{ '/' | relative_url }}">
+            <img src="https://cdn.luogu.com.cn/upload/image_hosting/uhiclg5g.png" 
+                 alt="jsntzth 的博客" 
+                 style="width: 40px; height: 40px; margin-right: 12px;">
+          </a>
+          
+          <a class="site-title" href="{{ '/' | relative_url }}">
+            jsntzth 的博客
+          </a>
+        </div>
         
-        <a class="site-title" href="{{ '/' | relative_url }}" style="margin-right: 20px;">
-          jsntzth 的博客
-        </a>
-        
-        <!-- 导航链接（替换系统原有链接） -->
-        <ul class="visible-links">
+        <!-- 中间：导航链接 -->
+        <ul class="visible-links" style="margin: 0 auto;">
           <li class="masthead__menu-item">
             <a href="{{ '/' | relative_url }}"><i class="fa fa-home"></i> 首页</a>
           </li>
@@ -32,7 +34,7 @@
           </li>
           <li class="masthead__menu-item">
             <div class="theme-switcher-container">
-              <button class="theme-switcher-btn" style="background: none; border: none; cursor: pointer;">
+              <button class="theme-switcher-btn" style="background: none; border: none; cursor: pointer; padding: 0;">
                 <i class="fa fa-paint-brush"></i> 普通深色 ▼
               </button>
               <ul class="theme-options hidden">
@@ -45,13 +47,22 @@
           </li>
         </ul>
         
-        <!-- 搜索按钮（修复图标） -->
-        <button class="search__toggle" type="button">
-          <span class="visually-hidden">切换搜索</span>
-          <i class="fa fa-search"></i> <!-- 修复为fa前缀 -->
-        </button>
+        <!-- 右侧：搜索图标（调整位置，不那么靠右） -->
+        <div style="display: flex; align-items: center; gap: 15px; margin-right: 20px;">
+          <!-- 文章内需要的GitHub和Email图标样式预定义 -->
+          <style>
+            .post-github-icon:before { content: "\f09b"; }
+            .post-email-icon:before { content: "\f0e0"; }
+          </style>
+          
+          <!-- 搜索图标 -->
+          <button class="search__toggle" type="button">
+            <span class="visually-hidden">切换搜索</span>
+            <i class="fa fa-search"></i>
+          </button>
+        </div>
         
-        <!-- 移动端菜单按钮（保留系统功能） -->
+        <!-- 移动端菜单按钮 -->
         <button class="greedy-nav__toggle hidden" type="button" count="0">
           <span class="visually-hidden">切换菜单</span>
           <div class="navicon"></div>
@@ -67,8 +78,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
 
-<!-- 图标库（优先加载） -->
+<!-- 图标库（使用4.7.0完整版本） -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.css">
+
 <!-- 主样式表 -->
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 
@@ -76,30 +89,41 @@
 <script src="{{ '/assets/js/theme-switcher.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
 
-<!-- 图标兼容性修复 -->
+<!-- 图标显示核心修复 -->
 <style>
-  /* 确保所有图标使用正确字体 */
+  /* 确保FontAwesome字体正确加载 */
+  @font-face {
+    font-family: 'FontAwesome';
+    src: url('https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/fonts/fontawesome-webfont.eot?v=4.7.0');
+    src: url('https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/fonts/fontawesome-webfont.eot?#iefix&v=4.7.0') format('embedded-opentype'),
+         url('https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0') format('woff2'),
+         url('https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/fonts/fontawesome-webfont.woff?v=4.7.0') format('woff'),
+         url('https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/fonts/fontawesome-webfont.ttf?v=4.7.0') format('truetype'),
+         url('https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/fonts/fontawesome-webfont.svg?v=4.7.0#fontawesomeregular') format('svg');
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  /* 所有图标基础样式 */
   .fa {
-    font-family: "FontAwesome" !important;
     display: inline-block !important;
+    font: normal normal normal 14px/1 FontAwesome !important;
+    font-size: inherit !important;
+    text-rendering: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
     margin-right: 5px !important;
   }
   
-  /* 修复文章内图标 */
-  .post-content i.fa-github, 
-  .post-content i.fa-envelope {
-    font-family: "FontAwesome" !important;
-    display: inline-block !important;
-  }
-  
-  /* 移除多余空格 */
+  /* 导航项间距调整 */
   .masthead__menu-item {
-    margin: 0 8px !important;
+    margin: 0 10px !important;
   }
   
-  .site-title {
-    padding: 0 !important;
-    margin: 0 !important;
+  /* 文章内GitHub和Email图标专用样式 */
+  .post-content .fa-github, .post-content .fa-envelope {
+    display: inline-block !important;
+    font-family: FontAwesome !important;
   }
 </style>
     
