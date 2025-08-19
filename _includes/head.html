@@ -3,9 +3,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
 
-    <!-- 强制优先加载Font Awesome 4.7.0 -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
-    
     <!-- 主样式表 -->
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 
@@ -30,7 +27,7 @@
             font-family: "FontAwesome" !important;
             margin-right: 8px !important;
             font-size: 16px !important;
-            color: #333 !important; /* 确保图标可见 */
+            color: #333 !important;
         }
         
         /* 文章底部分享区域图标（重点修复） */
@@ -44,31 +41,13 @@
             margin: 0 5px !important;
             font-size: 18px !important;
         }
-        
-        /* 防止其他样式覆盖 */
-        [class*="fa-"]:before {
-            content: attr(data-icon) !important;
-            font-family: "FontAwesome" !important;
-        }
     </style>
 
     <!-- 功能脚本 -->
     <script src="{{ '/assets/js/theme-switcher.js' | relative_url }}"></script>
     <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
 
-    <!-- MathJax配置 -->
-    <script type="text/x-mathjax-config">
-        MathJax.Hub.Config({
-            tex2jax: {
-                inlineMath: [ ['$', '$'], ["\\(", "\\)"] ],
-                displayMath: [ ['$$', '$$'], ["\\[", "\\]"] ],
-                processEscapes: true
-            }
-        });
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-    <!-- 主题切换脚本 -->
+    <!-- 主题切换脚本（仅保留一处） -->
     <script>
         (function() {
             const savedTheme = localStorage.getItem('blogTheme') || 'light';
