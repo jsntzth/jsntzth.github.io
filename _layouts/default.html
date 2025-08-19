@@ -11,6 +11,8 @@
 
   <body class="layout--{{ page.layout | default: layout.layout }}{% if page.classes or layout.classes %}{{ page.classes | default: layout.classes | join: ' ' | prepend: ' ' }}{% endif %}" dir="{% if site.rtl %}rtl{% else %}ltr{% endif %}">
     {% include_cached skip-links.html %}
+    
+    <!-- 仅保留一个导航栏引入 -->
     {% include_cached masthead.html %}
 
     <div class="initial-content">
