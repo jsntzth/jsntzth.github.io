@@ -1,22 +1,27 @@
 <header class="masthead" role="banner">
   <div class="wrap">
-    <!-- 合并导航栏样式 -->
+    <!-- 导航栏样式 -->
     <style>
-      .combined-header {
+      .site-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         width: 100%;
       }
       
+      .logo-container {
+        display: flex;
+        align-items: center;
+      }
+      
       .logo {
         font-size: 1.5rem;
         font-weight: bold;
         text-decoration: none;
-        margin-right: 2rem;
+        margin-right: 2rem; /* 与导航项保持距离 */
       }
       
-      .merged-nav {
+      .main-nav ul {
         display: flex !important;
         flex-direction: row !important;
         flex-wrap: nowrap !important;
@@ -27,77 +32,70 @@
         align-items: center !important;
       }
       
-      .merged-nav li {
+      .main-nav li {
         margin: 0 !important;
         padding: 0 !important;
       }
       
-      .merged-nav a {
+      .main-nav a {
         text-decoration: none !important;
         display: inline-flex !important;
         align-items: center !important;
         gap: 0.3rem !important;
       }
       
-      .theme-switcher-btn, .search__toggle {
+      .theme-switcher-btn {
         display: inline-flex !important;
         align-items: center !important;
         gap: 0.3rem !important;
+      }
+      
+      .search__toggle {
         background: transparent !important;
         border: none !important;
         cursor: pointer !important;
         font-size: 1rem !important;
         color: inherit !important;
       }
-      
-      /* 隐藏系统导航栏的原始样式，只保留内容并合并 */
-      .system-nav-original {
-        display: none !important;
-      }
     </style>
 
-    <div class="combined-header">
-      <!-- Logo -->
-      <a href="{{ '/' | relative_url }}" class="logo">jsntzth 的博客</a>
+    <div class="site-header">
+      <!-- Logo区域 -->
+      <div class="logo-container">
+        <a href="{{ '/' | relative_url }}" class="logo">jsntzth 的博客</a>
+      </div>
       
-      <!-- 合并的导航列表 -->
-      <ul class="merged-nav">
-        <!-- 原自定义导航项 -->
-        <li><a href="{{ '/' | relative_url }}"><i class="fa fa-home"></i> 首页</a></li>
-        <li><a href="{{ '/categories/' | relative_url }}"><i class="fa fa-folder"></i> 分类</a></li>
-        <li><a href="{{ '/tags/' | relative_url }}"><i class="fa fa-tags"></i> 标签</a></li>
-        <li><a href="{{ '/friends/' | relative_url }}"><i class="fa fa-link"></i> 友链</a></li>
-        <li><a href="{{ '/about/' | relative_url }}"><i class="fa fa-user"></i> 关于</a></li>
-        
-        <!-- 主题切换器 -->
-        <li class="theme-switcher-item">
-          <div class="theme-switcher-container">
-            <button class="theme-switcher-btn"><i class="fa fa-paint-brush"></i> 普通深色 ▼</button>
-            <ul class="theme-options hidden">
-              <li data-theme="light">普通浅色</li>
-              <li data-theme="dark">普通深色</li>
-              <li data-theme="light-img">带图浅色</li>
-              <li data-theme="dark-img">带图深色</li>
-            </ul>
-          </div>
-        </li>
-        
-        <!-- 系统导航栏的搜索功能 -->
-        <li>
-          <button class="search__toggle" type="button">
-            <span class="visually-hidden">切换搜索</span>
-            <i class="fa fa-search"></i>
-          </button>
-        </li>
-        
-        <!-- 系统导航栏的其他必要项（如果有） -->
-        {% comment %} 系统导航栏的其他内容可以在这里添加 {% endcomment %}
-      </ul>
-    </div>
-    
-    <!-- 系统导航栏原始内容（被隐藏但保留以确保功能） -->
-    <div class="system-nav-original">
-      {% comment %} 系统导航栏的原始代码保留在这里，但通过CSS隐藏 {% endcomment %}
+      <!-- 导航菜单 -->
+      <nav class="main-nav" role="navigation">
+        <ul>
+          <li><a href="{{ '/' | relative_url }}"><i class="fa fa-home"></i> 首页</a></li>
+          <li><a href="{{ '/categories/' | relative_url }}"><i class="fa fa-folder"></i> 分类</a></li>
+          <li><a href="{{ '/tags/' | relative_url }}"><i class="fa fa-tags"></i> 标签</a></li>
+          <li><a href="{{ '/friends/' | relative_url }}"><i class="fa fa-link"></i> 友链</a></li>
+          <li><a href="{{ '/about/' | relative_url }}"><i class="fa fa-user"></i> 关于</a></li>
+          
+          <!-- 主题切换器 -->
+          <li class="theme-switcher-item">
+            <div class="theme-switcher-container">
+              <button class="theme-switcher-btn"><i class="fa fa-paint-brush"></i> 普通深色 ▼</button>
+              <ul class="theme-options hidden">
+                <li data-theme="light">普通浅色</li>
+                <li data-theme="dark">普通深色</li>
+                <li data-theme="light-img">带图浅色</li>
+                <li data-theme="dark-img">带图深色</li>
+              </ul>
+            </div>
+          </li>
+          
+          <!-- 搜索图标（放在最后） -->
+          <li>
+            <button class="search__toggle" type="button">
+              <span class="visually-hidden">切换搜索</span>
+              <i class="fa fa-search"></i>
+            </button>
+          </li>
+        </ul>
+      </nav>
     </div>
   </div>
 </header>
