@@ -1,7 +1,8 @@
 <header class="masthead" role="banner">
   <div class="wrap">
-    <!-- 导航菜单样式（确保横向排列） -->
+    <!-- 系统导航栏核心样式 -->
     <style>
+      /* 确保导航项横向排列 */
       .main-nav ul {
         display: flex !important;
         flex-direction: row !important;
@@ -13,6 +14,7 @@
         align-items: center !important;
       }
       
+      /* 导航项基础样式 */
       .main-nav li {
         margin: 0 !important;
         padding: 0 !important;
@@ -25,15 +27,36 @@
         gap: 0.3rem !important;
       }
       
+      /* 主题切换器样式 */
       .theme-switcher-btn {
         display: inline-flex !important;
         align-items: center !important;
         gap: 0.3rem !important;
       }
+
+      /* 系统搜索图标样式兼容 */
+      .search__toggle {
+        background: transparent !important;
+        border: none !important;
+        cursor: pointer !important;
+        font-size: 1rem !important;
+        color: inherit !important;
+        padding: 0.2rem 0 !important;
+      }
     </style>
 
+    <!-- 系统导航栏内容（整合后的主导航） -->
     <nav class="main-nav" role="navigation">
       <ul>
+        <!-- 系统搜索图标（确保兼容） -->
+        <li>
+          <button class="search__toggle" type="button">
+            <span class="visually-hidden">切换搜索</span>
+            <i class="fa fa-search"></i> <!-- 使用fa前缀确保显示 -->
+          </button>
+        </li>
+        
+        <!-- 核心导航项 -->
         <li><a href="{{ '/' | relative_url }}"><i class="fa fa-home"></i> 首页</a></li>
         <li><a href="{{ '/categories/' | relative_url }}"><i class="fa fa-folder"></i> 分类</a></li>
         <li><a href="{{ '/tags/' | relative_url }}"><i class="fa fa-tags"></i> 标签</a></li>
@@ -57,11 +80,30 @@
   </div>
 </header>
 
-<!-- 确保CSS和JS正确导入（关键代码） -->
-<!-- 1. 主样式表 -->
+<!-- 页面元数据和资源引入 -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+
+<!-- 核心样式和图标库（确保所有图标正常） -->
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
-<!-- 2. Font Awesome图标库 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
-<!-- 3. 主题切换脚本 -->
+
+<!-- 系统脚本（含图标相关功能） -->
 <script src="{{ '/assets/js/theme-switcher.js' | relative_url }}"></script>
+<script src="{{ '/assets/js/search.js' | relative_url }}"></script> <!-- 确保搜索功能正常 -->
+
+<!-- 文章内图标兼容样式 -->
+<style>
+  /* 确保文章内所有图标使用fa前缀时正常显示 */
+  .post-content i.fa {
+    display: inline-block !important;
+    margin-right: 0.3rem !important;
+  }
+  
+  /* 系统自带图标的兼容处理 */
+  [class^="fa-"]:before, [class*=" fa-"]:before {
+    font-family: "FontAwesome" !important;
+  }
+</style>
     
