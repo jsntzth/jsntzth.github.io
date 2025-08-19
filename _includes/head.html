@@ -1,26 +1,40 @@
 <header class="masthead" role="banner">
   <div class="wrap">
-    <!-- 导航栏样式 -->
+    <!-- 核心样式 - 确保系统导航栏被移除且布局正确 -->
     <style>
-      .site-header {
+      /* 完全隐藏系统导航栏 */
+      .system-nav, .original-masthead {
+        display: none !important;
+      }
+      
+      /* 主容器 - Logo居左，导航项居右 */
+      .custom-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         width: 100%;
       }
       
+      /* Logo样式 - 调整大小 */
       .logo-container {
         display: flex;
         align-items: center;
+        gap: 0.8rem;
       }
       
-      .logo {
-        font-size: 1.5rem;
+      .logo-image {
+        width: 40px;  /* 调整logo大小 */
+        height: 40px;
+        border-radius: 50%; /* 圆形logo */
+      }
+      
+      .logo-text {
+        font-size: 1.3rem;
         font-weight: bold;
         text-decoration: none;
-        margin-right: 2rem; /* 与导航项保持距离 */
       }
       
+      /* 导航项横向排列 */
       .main-nav ul {
         display: flex !important;
         flex-direction: row !important;
@@ -44,25 +58,32 @@
         gap: 0.3rem !important;
       }
       
-      .theme-switcher-btn {
+      /* 按钮样式 */
+      .theme-switcher-btn, .search__toggle {
         display: inline-flex !important;
         align-items: center !important;
         gap: 0.3rem !important;
-      }
-      
-      .search__toggle {
         background: transparent !important;
         border: none !important;
         cursor: pointer !important;
         font-size: 1rem !important;
         color: inherit !important;
       }
+      
+      /* 确保所有图标正常显示的关键样式 */
+      [class^="fa-"]:before, [class*=" fa-"]:before {
+        font-family: "FontAwesome" !important;
+        font-style: normal !important;
+        font-weight: normal !important;
+      }
     </style>
 
-    <div class="site-header">
-      <!-- Logo区域 -->
+    <div class="custom-header">
+      <!-- Logo区域（图片+文字） -->
       <div class="logo-container">
-        <a href="{{ '/' | relative_url }}" class="logo">jsntzth 的博客</a>
+        <img src="https://cdn.luogu.com.cn/upload/image_hosting/uhiclg5g.png" 
+             alt="博客Logo" class="logo-image">
+        <a href="{{ '/' | relative_url }}" class="logo-text">jsntzth 的博客</a>
       </div>
       
       <!-- 导航菜单 -->
@@ -87,7 +108,7 @@
             </div>
           </li>
           
-          <!-- 搜索图标（放在最后） -->
+          <!-- 搜索图标 -->
           <li>
             <button class="search__toggle" type="button">
               <span class="visually-hidden">切换搜索</span>
@@ -105,8 +126,22 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
 
-<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+<!-- 确保图标库优先加载 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+<!-- 主样式表 -->
+<link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+
+<!-- 功能脚本 -->
 <script src="{{ '/assets/js/theme-switcher.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
+
+<!-- 文章内图标修复样式 -->
+<style>
+  /* 修复文章内GitHub和Email图标 */
+  .post-content .fa-github, .post-content .fa-envelope {
+    display: inline-block !important;
+    font-family: "FontAwesome" !important;
+    margin-right: 0.3rem;
+  }
+</style>
     
