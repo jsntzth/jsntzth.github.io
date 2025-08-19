@@ -3,16 +3,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
 
-    <!-- 1. 引入Font Awesome 4.7.0（确保图标兼容性） -->
+    <!-- 优先引入Font Awesome 4.7.0 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
     
-    <!-- 2. 主样式表 -->
+    <!-- 主样式表 -->
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 
-    <!-- 3. 图标显示强制修复（解决样式冲突） -->
+    <!-- 增强图标显示修复（覆盖所有可能冲突） -->
     <style>
-        /* 基础图标样式：强制使用FontAwesome字体 */
-        .fa {
+        /* 全局图标修复 */
+        [class^="fa-"], [class*=" fa-"] {
             display: inline-block !important;
             font-family: "FontAwesome" !important;
             font-style: normal !important;
@@ -20,32 +20,43 @@
             font-size: inherit !important;
             text-rendering: auto !important;
             -webkit-font-smoothing: antialiased !important;
-            margin-right: 5px !important;
         }
         
-        /* 修复文章内GitHub/Email图标 */
-        .post-content .fa-github, 
-        .post-content .fa-envelope,
-        /* 修复页脚GitHub/Feed图标 */
-        .page__footer-follow .fa-github,
-        .page__footer-follow .fa-rss-square {
-            display: inline-block !important;
+        /* 个人信息区域图标（江苏-南通下方） */
+        .profile-icons .fa-github,
+        .profile-icons .fa-envelope,
+        .profile-icons .fa-map-marker,
+        .profile-icons .fa-code {
+            font-size: 18px !important;
+            margin-right: 8px !important;
+            color: inherit !important;
+        }
+        
+        /* 分享区域图标 */
+        .share-buttons .fa,
+        .post-sharing .fa {
             font-family: "FontAwesome" !important;
-            font-size: 16px !important;
+            display: inline-block !important;
+            margin: 0 4px !important;
         }
         
-        /* 修复搜索图标（适配4.7.0版本） */
+        /* 导航栏图标 */
+        #site-nav .fa {
+            margin-right: 6px !important;
+        }
+        
+        /* 搜索图标 */
         .search__toggle .fa-search {
             font-family: "FontAwesome" !important;
             display: inline-block !important;
         }
     </style>
 
-    <!-- 4. 功能脚本 -->
+    <!-- 功能脚本 -->
     <script src="{{ '/assets/js/theme-switcher.js' | relative_url }}"></script>
     <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
 
-    <!-- 5. MathJax配置（支持数学公式渲染） -->
+    <!-- MathJax配置 -->
     <script type="text/x-mathjax-config">
         MathJax.Hub.Config({
             tex2jax: {
@@ -65,7 +76,7 @@
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
 
-    <!-- 6. 主题切换初始化脚本 -->
+    <!-- 主题切换脚本 -->
     <script>
         (function() {
             const savedTheme = localStorage.getItem('blogTheme') || 'light';
