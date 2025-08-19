@@ -3,6 +3,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
 
+    <!-- 引入Font Awesome图标库 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
+    
     <!-- 主样式表 -->
     <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
 
@@ -52,6 +55,21 @@
         (function() {
             const savedTheme = localStorage.getItem('blogTheme') || 'light';
             document.documentElement.classList.add(`theme-${savedTheme}`);
+            
+            // 确保主题切换功能正常工作
+            window.addEventListener('DOMContentLoaded', function() {
+                const themeToggle = document.querySelector('.theme-toggle');
+                if (themeToggle) {
+                    themeToggle.addEventListener('click', function() {
+                        const currentTheme = document.documentElement.classList.contains('theme-dark') ? 'dark' : 'light';
+                        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+                        
+                        document.documentElement.classList.remove(`theme-${currentTheme}`);
+                        document.documentElement.classList.add(`theme-${newTheme}`);
+                        localStorage.setItem('blogTheme', newTheme);
+                    });
+                }
+            });
         })();
     </script>
 </head>
