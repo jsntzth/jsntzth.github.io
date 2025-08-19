@@ -1,104 +1,40 @@
 <header class="masthead" role="banner">
   <div class="wrap">
-    <!-- 核心样式 - 确保系统导航栏被移除且布局正确 -->
-    <style>
-      /* 完全隐藏系统导航栏 */
-      .system-nav, .original-masthead {
-        display: none !important;
-      }
-      
-      /* 主容器 - Logo居左，导航项居右 */
-      .custom-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        width: 100%;
-      }
-      
-      /* Logo样式 - 调整大小 */
-      .logo-container {
-        display: flex;
-        align-items: center;
-        gap: 0.8rem;
-      }
-      
-      .logo-image {
-        width: 40px;  /* 调整logo大小 */
-        height: 40px;
-        border-radius: 50%; /* 圆形logo */
-      }
-      
-      .logo-text {
-        font-size: 1.3rem;
-        font-weight: bold;
-        text-decoration: none;
-      }
-      
-      /* 导航项横向排列 */
-      .main-nav ul {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: nowrap !important;
-        list-style: none !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        gap: 1.5rem !important;
-        align-items: center !important;
-      }
-      
-      .main-nav li {
-        margin: 0 !important;
-        padding: 0 !important;
-      }
-      
-      .main-nav a {
-        text-decoration: none !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 0.3rem !important;
-      }
-      
-      /* 按钮样式 */
-      .theme-switcher-btn, .search__toggle {
-        display: inline-flex !important;
-        align-items: center !important;
-        gap: 0.3rem !important;
-        background: transparent !important;
-        border: none !important;
-        cursor: pointer !important;
-        font-size: 1rem !important;
-        color: inherit !important;
-      }
-      
-      /* 确保所有图标正常显示的关键样式 */
-      [class^="fa-"]:before, [class*=" fa-"]:before {
-        font-family: "FontAwesome" !important;
-        font-style: normal !important;
-        font-weight: normal !important;
-      }
-    </style>
-
-    <div class="custom-header">
-      <!-- Logo区域（图片+文字） -->
-      <div class="logo-container">
-        <img src="https://cdn.luogu.com.cn/upload/image_hosting/uhiclg5g.png" 
-             alt="博客Logo" class="logo-image">
-        <a href="{{ '/' | relative_url }}" class="logo-text">jsntzth 的博客</a>
-      </div>
-      
-      <!-- 导航菜单 -->
-      <nav class="main-nav" role="navigation">
-        <ul>
-          <li><a href="{{ '/' | relative_url }}"><i class="fa fa-home"></i> 首页</a></li>
-          <li><a href="{{ '/categories/' | relative_url }}"><i class="fa fa-folder"></i> 分类</a></li>
-          <li><a href="{{ '/tags/' | relative_url }}"><i class="fa fa-tags"></i> 标签</a></li>
-          <li><a href="{{ '/friends/' | relative_url }}"><i class="fa fa-link"></i> 友链</a></li>
-          <li><a href="{{ '/about/' | relative_url }}"><i class="fa fa-user"></i> 关于</a></li>
-          
-          <!-- 主题切换器 -->
-          <li class="theme-switcher-item">
+    <div class="masthead__menu">
+      <nav id="site-nav" class="greedy-nav">
+        <!-- Logo和标题区域（保留系统原有结构） -->
+        <a class="site-logo" href="{{ '/' | relative_url }}">
+          <img src="https://cdn.luogu.com.cn/upload/image_hosting/uhiclg5g.png" 
+               alt="jsntzth 的博客" 
+               style="width: 40px; height: 40px; margin-right: 8px;">
+        </a>
+        
+        <a class="site-title" href="{{ '/' | relative_url }}" style="margin-right: 20px;">
+          jsntzth 的博客
+        </a>
+        
+        <!-- 导航链接（替换系统原有链接） -->
+        <ul class="visible-links">
+          <li class="masthead__menu-item">
+            <a href="{{ '/' | relative_url }}"><i class="fa fa-home"></i> 首页</a>
+          </li>
+          <li class="masthead__menu-item">
+            <a href="{{ '/categories/' | relative_url }}"><i class="fa fa-folder"></i> 分类</a>
+          </li>
+          <li class="masthead__menu-item">
+            <a href="{{ '/tags/' | relative_url }}"><i class="fa fa-tags"></i> 标签</a>
+          </li>
+          <li class="masthead__menu-item">
+            <a href="{{ '/friends/' | relative_url }}"><i class="fa fa-link"></i> 友链</a>
+          </li>
+          <li class="masthead__menu-item">
+            <a href="{{ '/about/' | relative_url }}"><i class="fa fa-user"></i> 关于</a>
+          </li>
+          <li class="masthead__menu-item">
             <div class="theme-switcher-container">
-              <button class="theme-switcher-btn"><i class="fa fa-paint-brush"></i> 普通深色 ▼</button>
+              <button class="theme-switcher-btn" style="background: none; border: none; cursor: pointer;">
+                <i class="fa fa-paint-brush"></i> 普通深色 ▼
+              </button>
               <ul class="theme-options hidden">
                 <li data-theme="light">普通浅色</li>
                 <li data-theme="dark">普通深色</li>
@@ -107,15 +43,20 @@
               </ul>
             </div>
           </li>
-          
-          <!-- 搜索图标 -->
-          <li>
-            <button class="search__toggle" type="button">
-              <span class="visually-hidden">切换搜索</span>
-              <i class="fa fa-search"></i>
-            </button>
-          </li>
         </ul>
+        
+        <!-- 搜索按钮（修复图标） -->
+        <button class="search__toggle" type="button">
+          <span class="visually-hidden">切换搜索</span>
+          <i class="fa fa-search"></i> <!-- 修复为fa前缀 -->
+        </button>
+        
+        <!-- 移动端菜单按钮（保留系统功能） -->
+        <button class="greedy-nav__toggle hidden" type="button" count="0">
+          <span class="visually-hidden">切换菜单</span>
+          <div class="navicon"></div>
+        </button>
+        <ul class="hidden-links hidden"></ul>
       </nav>
     </div>
   </div>
@@ -126,7 +67,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
 
-<!-- 确保图标库优先加载 -->
+<!-- 图标库（优先加载） -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css">
 <!-- 主样式表 -->
 <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
@@ -135,13 +76,30 @@
 <script src="{{ '/assets/js/theme-switcher.js' | relative_url }}"></script>
 <script src="{{ '/assets/js/search.js' | relative_url }}"></script>
 
-<!-- 文章内图标修复样式 -->
+<!-- 图标兼容性修复 -->
 <style>
-  /* 修复文章内GitHub和Email图标 */
-  .post-content .fa-github, .post-content .fa-envelope {
-    display: inline-block !important;
+  /* 确保所有图标使用正确字体 */
+  .fa {
     font-family: "FontAwesome" !important;
-    margin-right: 0.3rem;
+    display: inline-block !important;
+    margin-right: 5px !important;
+  }
+  
+  /* 修复文章内图标 */
+  .post-content i.fa-github, 
+  .post-content i.fa-envelope {
+    font-family: "FontAwesome" !important;
+    display: inline-block !important;
+  }
+  
+  /* 移除多余空格 */
+  .masthead__menu-item {
+    margin: 0 8px !important;
+  }
+  
+  .site-title {
+    padding: 0 !important;
+    margin: 0 !important;
   }
 </style>
     
