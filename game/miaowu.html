@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>喵呜翻译软件</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#EC4899',
+                        neutral: '#1F2937',
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .transition-all-300 {
+                transition: all 300ms ease-in-out;
+            }
+            .card-shadow {
+                box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen font-sans text-neutral">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <header class="text-center mb-10">
+            <h1 class="text-[clamp(2rem,5vw,3rem)] font-bold text-primary mb-2">
+                <i class="fa fa-exchange mr-3"></i>喵呜互翻
+            </h1>
+            <p class="text-gray-600 text-lg">将英文单词与"喵"(".")、"呜"("-")表示的摩尔斯电码互相转换 喵~</p>
+        </header>
+        <div class="bg-white rounded-xl p-6 md:p-8 card-shadow mb-8">
+            <div class="flex justify-center mb-6">
+                <div class="inline-flex bg-gray-100 p-1 rounded-full">
+                    <button id="encodeBtn" class="px-5 py-2 rounded-full bg-primary text-white font-medium transition-all-300">
+                        英文 → 喵呜
+                    </button>
+                    <button id="decodeBtn" class="px-5 py-2 rounded-full text-gray-600 font-medium transition-all-300">
+                        喵呜 → 英文
+                    </button>
+                </div>
+            </div>
+            <div class="mb-6">
+                <label for="inputText" class="block text-sm font-medium text-gray-700 mb-2">
+                    <span id="inputLabel">请输入英文单词或句子：</span>
+                </label>
+                <textarea 
+                    id="inputText" 
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary transition-all-300 h-32 resize-none"
+                    placeholder="输入要转换的内容..."></textarea>
+                <p id="inputHelper" class="mt-1 text-sm text-gray-500">
+                    可以包含字母、数字和空格，其他字符将保持不变哦喵
+                </p>
+            </div>
+            <div class="text-center mb-6">
+                <button id="convertBtn" class="bg-secondary hover:bg-pink-600 text-white font-bold py-3 px-8 rounded-full shadow-lg hover:shadow-xl transition-all-300 transform hover:-translate-y-1">
+                    <i class="fa fa-magic mr-2"></i>开始转换
+                </button>
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">
+                    转换结果：
+                </label>
+                <div id="result" class="w-full px-4 py-3 bg-gray-50 border border-gray-300 rounded-lg min-h-32 flex items-center justify-center text-gray-600">
+                    转换结果将显示在这里...
+                </div>
+                <div class="flex justify-end mt-2">
+                    <button id="copyBtn" class="text-primary hover:text-primary/80 text-sm font-medium transition-all-300">
+                        <i class="fa fa-copy mr-1"></i>复制结果
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="bg-white rounded-xl p-6 md:p-8 card-shadow">
+            <h2 class="text-xl font-bold text-primary mb-4">
+                <i class="fa fa-info-circle mr-2"></i>使用说明
+            </h2>
+            <ul class="list-disc pl-5 space-y-2 text-gray-600">
+                <li>编码模式：将英文单词转换为摩尔斯电码，其中"."转换为"喵"，"-"转换为"呜"</li>
+                <li>解码模式：将"喵呜"组成的摩尔斯电码转换回英文，电码之间需要用空格分隔</li>
+                <li>支持字母、数字和空格，其他特殊字符将保持不变</li>
+                <li>转换后的结果可以点击"复制结果"按钮复制到剪贴板</li>
+                <li>喵呜 ~</li>
+            </ul>
+        </div>
+        <footer class="mt-10 text-center text-gray-500 text-sm">
+            <p>© 2025 喵呜翻译工具 | 一个有趣的编码转换应用 | 支持一下蟹蟹喵~</p>
+        </footer>
+    </div>
+    <script>
+        const morseCodeMap = {
+            'A': ".-", 'B': "-...", 'C': "-.-.", 'D': "-..", 'E': ".",
+            'F': "..-.", 'G': "--.", 'H': "....", 'I': "..", 'J': ".---",
+            'K': "-.-", 'L': ".-..", 'M': "--", 'N': "-.", 'O': "---",
+            'P': ".--.", 'Q': "--.-", 'R': ".-.", 'S': "...", 'T': "-",
+            'U': "..-", 'V': "...-", 'W': ".--", 'X': "-..-", 'Y': "-.--",
+            'Z': "--..",
+            '1': ".----", '2': "..---", '3': "...--", '4': "....-", '5': ".....",
+            '6': "-....", '7': "--...", '8': "---..", '9': "----.", '0': "-----",
+            ' ': " "
+        };
+        const reverseMorseMap = {};
+        for (const [char, code] of Object.entries(morseCodeMap)) {
+            reverseMorseMap[code] = char;
+        }
+        let isEncoding = true;
+        const encodeBtn = document.getElementById('encodeBtn');
+        const decodeBtn = document.getElementById('decodeBtn');
+        const inputText = document.getElementById('inputText');
+        const inputLabel = document.getElementById('inputLabel');
+        const inputHelper = document.getElementById('inputHelper');
+        const convertBtn = document.getElementById('convertBtn');
+        const result = document.getElementById('result');
+        const copyBtn = document.getElementById('copyBtn');
+        encodeBtn.addEventListener('click', () => {
+            isEncoding = true;
+            encodeBtn.classList.add('bg-primary', 'text-white');
+            encodeBtn.classList.remove('text-gray-600');
+            decodeBtn.classList.remove('bg-primary', 'text-white');
+            decodeBtn.classList.add('text-gray-600');
+            inputLabel.textContent = '请输入英文单词或句子：';
+            inputHelper.textContent = '可以包含字母、数字和空格，其他字符将保持不变';
+            inputText.placeholder = '输入要转换的英文内容...';
+            inputText.value = '';
+            result.textContent = '转换结果将显示在这里...';
+        });
+        decodeBtn.addEventListener('click', () => {
+            isEncoding = false;
+            decodeBtn.classList.add('bg-primary', 'text-white');
+            decodeBtn.classList.remove('text-gray-600');
+            encodeBtn.classList.remove('bg-primary', 'text-white');
+            encodeBtn.classList.add('text-gray-600');
+            inputLabel.textContent = '请输入喵呜摩尔斯电码：';
+            inputHelper.textContent = '电码之间需要用空格分隔，例如：喵呜 喵喵喵 呜喵';
+            inputText.placeholder = '输入要转换的喵呜电码...';
+            inputText.value = '';
+            result.textContent = '转换结果将显示在这里...';
+        });
+        function encodeToMorse(text) {
+            let result = '';
+            for (const char of text) {
+                const upperChar = char.toUpperCase();
+                if (morseCodeMap.hasOwnProperty(upperChar)) {
+                    const morse = morseCodeMap[upperChar];
+                    const meowMorse = morse.replace(/\./g, '喵').replace(/-/g, '呜');
+                    result += meowMorse + (upperChar === ' ' ? '' : ' ');
+                } else {
+                    result += char;
+                }
+            }
+            return result.trim();
+        }
+        function decodeFromMorse(code) {
+            let result = '';
+            const codeSegments = code.split(' ');
+            for (const segment of codeSegments) {
+                if (segment === '') {
+                    result += ' ';
+                } else {
+                    const morse = segment.replace(/喵/g, '.').replace(/呜/g, '-');
+                    if (reverseMorseMap.hasOwnProperty(morse)) {
+                        result += reverseMorseMap[morse];
+                    } else {
+                        result += segment + ' ';
+                    }
+                }
+            }
+            return result;
+        }
+        convertBtn.addEventListener('click', () => {
+            const text = inputText.value.trim();
+            if (!text) {
+                result.textContent = '请输入要转换的内容喵';
+                result.classList.add('text-red-500');
+                setTimeout(() => {
+                    result.classList.remove('text-red-500');
+                }, 2000);
+                return;
+            }
+            let conversionResult;
+            if (isEncoding) {
+                conversionResult = encodeToMorse(text);
+            } else {
+                conversionResult = decodeFromMorse(text);
+            }
+            result.style.opacity = '0';
+            setTimeout(() => {
+                result.textContent = conversionResult;
+                result.style.opacity = '1';
+            }, 200);
+        });
+        copyBtn.addEventListener('click', () => {
+            const textToCopy = result.textContent;
+            if (textToCopy && textToCopy !== '转换结果将显示在这里...' && textToCopy !== '请输入要转换的内容') {
+                const tempTextArea = document.createElement('textarea');
+                tempTextArea.value = textToCopy;
+                document.body.appendChild(tempTextArea);
+                tempTextArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(tempTextArea);
+                const originalText = copyBtn.innerHTML;
+                copyBtn.innerHTML = '<i class="fa fa-check mr-1"></i>已复制喵~';
+                copyBtn.classList.add('text-green-600');
+                setTimeout(() => {
+                    copyBtn.innerHTML = originalText;
+                    copyBtn.classList.remove('text-green-600');
+                }, 2000);
+            }
+        });
+        inputText.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                convertBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>
